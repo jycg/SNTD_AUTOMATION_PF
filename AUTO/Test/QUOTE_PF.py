@@ -20,6 +20,7 @@ from faker import Faker
 from AUTO.Locator.locators import Locators
 from selenium.webdriver.edge.options import Options
 from AUTO.Test.SOL_DATOS_PERSONALES import MyTestCaseSolicitud
+# from AUTO.Locator.Data import fila, fila_environment
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "...", "..."))
 fake = Faker()
@@ -102,13 +103,13 @@ class MyTestCase(unittest.TestCase):
                 "var_crearsolicitud": sheet_quote.cell_value(numero_fila, 36),
             }
             print(fila)
-            try:
-                self.realizar_acciones_con_fila(fila, fila_environment)
-            except Exception as e:
-                error_message = f"Error en el escenario {fila['var_escenario']}: {str(e)}"
-                logging.error(error_message)
-                print(error_message)
-                # traceback.print_exc()
+        try:
+            self.realizar_acciones_con_fila(fila, fila_environment)
+        except Exception as e:
+            error_message = f"Error en el escenario {fila['var_escenario']}: {str(e)}"
+            logging.error(error_message)
+            print(error_message)
+            # traceback.print_exc()
 
     def realizar_acciones_con_fila(self, fila, fila_environment):
         # MyTestCaseSolicitud.datos_personales(unittest.TestCase)
