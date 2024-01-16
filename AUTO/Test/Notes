@@ -1,0 +1,12 @@
+# Con esta configuración se guarda información de la cotización en un log. La peculiaridad es que guarda una carpeta con su respectivo log cada vez que se ejecuta el script.
+# Si ejecutas solo una cotización, ese logo guardará solo un registro. Si ejecutas con 10 cotizaciones, se guardará en otra carpeta y log esas 10 cotizaciones
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "...", "..."))
+fake = Faker()
+log_dir = 'C:/Automation_Performance_Sast/app_log'
+os.makedirs(log_dir, exist_ok=True)
+log_subdir = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+log_dir = os.path.join(log_dir, log_subdir)
+os.makedirs(log_dir, exist_ok=True)
+log_filename = os.path.join(log_dir, 'log.txt')
+logging.basicConfig(filename=log_filename, level=logging.INFO,format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
