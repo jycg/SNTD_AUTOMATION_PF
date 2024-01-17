@@ -20,6 +20,8 @@ from faker import Faker
 from AUTO.Locator.locators import Locators
 from selenium.webdriver.edge.options import Options
 from AUTO.Test.SOL_DATOS_PERSONALES import MyTestCaseSolicitud
+from AUTO.Locator.Data import Dataquote
+
 # from AUTO.Locator.Data import fila, fila_environment
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "...", "..."))
@@ -52,61 +54,62 @@ class MyTestCase(unittest.TestCase):
         cls.driver.maximize_window()
 
     def test_login_valid(self):
-        archivo_excel = xlrd.open_workbook('C:/Automation_Performance_Sast/SNTD_QUOTE_PF_TEST.xls')
-        sheet_environment = archivo_excel.sheet_by_index(0)
-        fila_environment = {
-            "var_environment": sheet_environment.cell_value(1, 0),
-            "var_url": sheet_environment.cell_value(1, 1),
-            "var_canal": sheet_environment.cell_value(1, 2),
-            "var_user": sheet_environment.cell_value(1, 3)
-        }
-        print(fila_environment)
-        sheet_quote = archivo_excel.sheet_by_index(1)
-        for numero_fila in range(1, sheet_quote.nrows):
-            fila = {
-                "var_escenario": int(sheet_quote.cell_value(numero_fila, 0)),
-                "var_agencia": sheet_quote.cell_value(numero_fila, 1),
-                "var_tipo_credito": sheet_quote.cell_value(numero_fila, 2),
-                "var_producto_finan": sheet_quote.cell_value(numero_fila, 3),
-                "var_tipo_producto": sheet_quote.cell_value(numero_fila, 4),
-                "var_tipo_uso": sheet_quote.cell_value(numero_fila, 5),
-                "var_tipo_persona": sheet_quote.cell_value(numero_fila, 6),
-                "var_marca": sheet_quote.cell_value(numero_fila, 7),
-                "var_modelo": sheet_quote.cell_value(numero_fila, 8),
-                "var_version": sheet_quote.cell_value(numero_fila, 9),
-                "var_ano": int(sheet_quote.cell_value(numero_fila, 10)),
-                "var_plan": sheet_quote.cell_value(numero_fila, 11),
-                "var_accesorios": sheet_quote.cell_value(numero_fila, 12),
-                "var_monto_accesorios": sheet_quote.cell_value(numero_fila, 13),
-                "var_forma_pago_acce": sheet_quote.cell_value(numero_fila, 14),
-                "var_g_ext": sheet_quote.cell_value(numero_fila, 15),
-                "var_monto_g_ext": sheet_quote.cell_value(numero_fila, 16),
-                "var_forma_pago_g_ext": sheet_quote.cell_value(numero_fila, 17),
-                "var_plazo": int(sheet_quote.cell_value(numero_fila, 18)),
-                "var_seguro_robo_aut": sheet_quote.cell_value(numero_fila, 19),
-                "var_gap": sheet_quote.cell_value(numero_fila, 20),
-                "var_seguro_danos": sheet_quote.cell_value(numero_fila, 21),
-                "var_forma_pago": sheet_quote.cell_value(numero_fila, 22),
-                "var_tipo": sheet_quote.cell_value(numero_fila, 23),
-                "var_cp": sheet_quote.cell_value(numero_fila, 24),
-                "var_cobertura": sheet_quote.cell_value(numero_fila, 25),
-                "var_fecha": sheet_quote.cell_value(numero_fila, 26),
-                "var_sexo": sheet_quote.cell_value(numero_fila, 27),
-                "var_UDI": sheet_quote.cell_value(numero_fila, 28),
-                "var_recibo1": sheet_quote.cell_value(numero_fila, 29),
-                "var_recibo2": sheet_quote.cell_value(numero_fila, 30),
-                "var_subsecuente": sheet_quote.cell_value(numero_fila, 31),
-                "var_autocompara": sheet_quote.cell_value(numero_fila, 32),
-                "var_aseguradora": sheet_quote.cell_value(numero_fila, 33),
-                "var_faker": sheet_quote.cell_value(numero_fila, 34),
-                "var_tbl_amortiza": sheet_quote.cell_value(numero_fila, 35),
-                "var_crearsolicitud": sheet_quote.cell_value(numero_fila, 36),
-            }
-            print(fila)
+        dataquote = Dataquote()
+        # archivo_excel = xlrd.open_workbook('C:/Automation_Performance_Sast/SNTD_QUOTE_PF_TEST.xls')
+        # sheet_environment = archivo_excel.sheet_by_index(0)
+        # fila_environment = {
+        #     "var_environment": sheet_environment.cell_value(1, 0),
+        #     "var_url": sheet_environment.cell_value(1, 1),
+        #     "var_canal": sheet_environment.cell_value(1, 2),
+        #     "var_user": sheet_environment.cell_value(1, 3)
+        # }
+        # print(fila_environment)
+        # sheet_quote = archivo_excel.sheet_by_index(1)
+        # for numero_fila in range(1, sheet_quote.nrows):
+        #     fila = {
+        #         "var_escenario": int(sheet_quote.cell_value(numero_fila, 0)),
+        #         "var_agencia": sheet_quote.cell_value(numero_fila, 1),
+        #         "var_tipo_credito": sheet_quote.cell_value(numero_fila, 2),
+        #         "var_producto_finan": sheet_quote.cell_value(numero_fila, 3),
+        #         "var_tipo_producto": sheet_quote.cell_value(numero_fila, 4),
+        #         "var_tipo_uso": sheet_quote.cell_value(numero_fila, 5),
+        #         "var_tipo_persona": sheet_quote.cell_value(numero_fila, 6),
+        #         "var_marca": sheet_quote.cell_value(numero_fila, 7),
+        #         "var_modelo": sheet_quote.cell_value(numero_fila, 8),
+        #         "var_version": sheet_quote.cell_value(numero_fila, 9),
+        #         "var_ano": int(sheet_quote.cell_value(numero_fila, 10)),
+        #         "var_plan": sheet_quote.cell_value(numero_fila, 11),
+        #         "var_accesorios": sheet_quote.cell_value(numero_fila, 12),
+        #         "var_monto_accesorios": sheet_quote.cell_value(numero_fila, 13),
+        #         "var_forma_pago_acce": sheet_quote.cell_value(numero_fila, 14),
+        #         "var_g_ext": sheet_quote.cell_value(numero_fila, 15),
+        #         "var_monto_g_ext": sheet_quote.cell_value(numero_fila, 16),
+        #         "var_forma_pago_g_ext": sheet_quote.cell_value(numero_fila, 17),
+        #         "var_plazo": int(sheet_quote.cell_value(numero_fila, 18)),
+        #         "var_seguro_robo_aut": sheet_quote.cell_value(numero_fila, 19),
+        #         "var_gap": sheet_quote.cell_value(numero_fila, 20),
+        #         "var_seguro_danos": sheet_quote.cell_value(numero_fila, 21),
+        #         "var_forma_pago": sheet_quote.cell_value(numero_fila, 22),
+        #         "var_tipo": sheet_quote.cell_value(numero_fila, 23),
+        #         "var_cp": sheet_quote.cell_value(numero_fila, 24),
+        #         "var_cobertura": sheet_quote.cell_value(numero_fila, 25),
+        #         "var_fecha": sheet_quote.cell_value(numero_fila, 26),
+        #         "var_sexo": sheet_quote.cell_value(numero_fila, 27),
+        #         "var_UDI": sheet_quote.cell_value(numero_fila, 28),
+        #         "var_recibo1": sheet_quote.cell_value(numero_fila, 29),
+        #         "var_recibo2": sheet_quote.cell_value(numero_fila, 30),
+        #         "var_subsecuente": sheet_quote.cell_value(numero_fila, 31),
+        #         "var_autocompara": sheet_quote.cell_value(numero_fila, 32),
+        #         "var_aseguradora": sheet_quote.cell_value(numero_fila, 33),
+        #         "var_faker": sheet_quote.cell_value(numero_fila, 34),
+        #         "var_tbl_amortiza": sheet_quote.cell_value(numero_fila, 35),
+        #         "var_crearsolicitud": sheet_quote.cell_value(numero_fila, 36),
+        #     }
+        #     print(fila)
         try:
-            self.realizar_acciones_con_fila(fila, fila_environment)
+            self.realizar_acciones_con_fila(dataquote.fila, dataquote.fila_environment)
         except Exception as e:
-            error_message = f"Error en el escenario {fila['var_escenario']}: {str(e)}"
+            error_message = f"Error en el escenario {dataquote.fila['var_escenario']}: {str(e)}"
             logging.error(error_message)
             print(error_message)
             # traceback.print_exc()
@@ -442,49 +445,34 @@ class MyTestCase(unittest.TestCase):
             productall = "Prodcuto financiero: {}, Tipo de Producto: {}, Uso: {}, Tipo de Persona: {}" \
                 .format(fila["var_producto_finan"], fila["var_tipo_producto"], fila["var_tipo_uso"], fila["var_tipo_persona"])
             # Cuota
-            # try:
-            #     txtpay12: str = self.driver.find_element(By.XPATH, Locators.txtPay12).text
-            # except NoSuchElementException:
-            #     txtpay12 = "El plaso no está configurado en el plan"
-            # try:
-            #     txtpay24: str = self.driver.find_element(By.XPATH, Locators.txtPay24).text
-            # except NoSuchElementException:
-            #     txtpay24 = "El plaso no está configurado en el plan"
-            # try:
-            #     txtpay36: str = self.driver.find_element(By.XPATH, Locators.txtPay36).text
-            # except NoSuchElementException:
-            #     txtpay36 = "El plaso no está configurado en el plan"
-            # try:
-            #     txtpay48: str = self.driver.find_element(By.XPATH, Locators.txtPay48).text
-            # except NoSuchElementException:
-            #     txtpay48 = "El plaso no está configurado en el plan"
-            # try:
-            #     txtpay60: str = self.driver.find_element(By.XPATH, Locators.txtPay60).text
-            # except NoSuchElementException:
-            #     txtpay60 = "El plaso no está configurado en el plan"
-            # try:
-            #     txtpay72: str = self.driver.find_element(By.XPATH, Locators.txtPay72).text
-            # except NoSuchElementException:
-            #     txtpay72 = "El plaso no está configurado en el plan"
-            #
-            # cuotasall = "Cuota 12: {}, Cuota 24: {}, Cuota 36: {}, Cuota 48: {}, Cuota 60: {}, Cuota 72: {}" \
-            #     .format(txtpay12, txtpay24, txtpay36, txtpay48, txtpay60, txtpay72)
+            try:
+                txtpay12: str = self.driver.find_element(By.XPATH, Locators.txtPay12).text
+            except NoSuchElementException:
+                txtpay12 = "El plaso no está configurado en el plan"
+            try:
+                txtpay24: str = self.driver.find_element(By.XPATH, Locators.txtPay24).text
+            except NoSuchElementException:
+                txtpay24 = "El plaso no está configurado en el plan"
+            try:
+                txtpay36: str = self.driver.find_element(By.XPATH, Locators.txtPay36).text
+            except NoSuchElementException:
+                txtpay36 = "El plaso no está configurado en el plan"
+            try:
+                txtpay48: str = self.driver.find_element(By.XPATH, Locators.txtPay48).text
+            except NoSuchElementException:
+                txtpay48 = "El plaso no está configurado en el plan"
+            try:
+                txtpay60: str = self.driver.find_element(By.XPATH, Locators.txtPay60).text
+            except NoSuchElementException:
+                txtpay60 = "El plaso no está configurado en el plan"
+            try:
+                txtpay72: str = self.driver.find_element(By.XPATH, Locators.txtPay72).text
+            except NoSuchElementException:
+                txtpay72 = "El plaso no está configurado en el plan"
 
-            cuotasdetail = {}
-            cuotas_detail = {
-                "Cuota 12": Locators.txtPay12,
-                "Cuota 24": Locators.txtPay24,
-                "Cuota 36": Locators.txtPay36,
-                "Cuota 48": Locators.txtPay48,
-                "Cuota 60": Locators.txtPay60,
-                "Cuota 72": Locators.txtPay72
-            }
-            for cuotas__, cuota__ in cuotas_detail.items():
-                try:
-                    cuotasdetail[cuotas__] = self.driver.find_element(By.XPATH, cuota__).text
-                except NoSuchElementException:
-                    cuotasdetail[cuotas__] = f"El plaso no está configurado en el plan"
-            cuotasall = "Cuota 12: {Cuota 12}, Cuota 24: {Cuota 24}, Cuota 36: {Cuota 36}, Cuota 48: {Cuota 48}, Cuota 60: {Cuota 60}, Cuota 72: {Cuota 72}".format(**cuotasdetail)
+            cuotasall = "Cuota 12: {}, Cuota 24: {}, Cuota 36: {}, Cuota 48: {}, Cuota 60: {}, Cuota 72: {}" \
+                .format(txtpay12, txtpay24, txtpay36, txtpay48, txtpay60, txtpay72)
+
             # Vehículo
             lblcar: str = self.driver.find_element(By.ID, Locators.amortizationdetail_lblCar).text
             # Valor del Vehículo
@@ -604,6 +592,7 @@ class MyTestCase(unittest.TestCase):
             comments_all = "GAP: {}, SRA: {}, GE: {}".format(commentgap, commentrsa, commentge)
             # Guarda información en el log
             logging.info("*" * 45 + " ESCENARIO: %s " + "*" * 45 + "\n"
+                                                                   "- [Nombre Cliente]: %s\n"
                                                                    "- [PRODUCTO]: %s\n"
                                                                    "- [Vehículo]: %s\n"
                                                                    "- [Valor del Vehículo]: %s\n"
@@ -626,14 +615,14 @@ class MyTestCase(unittest.TestCase):
                                                                    "- [Monto a Financiar]: %s\n"
                                                                    "- [Primer Pago]: %s\n"
                                                                    "- [CAT]: %s\n"
-                                                                   "- [Nombre Cliente]: %s\n"
                                                                    "- [Cuotas All]: %s\n"
                                                                    "- [Tabla de Amortización]: %s\n"
                                                                    f"- [{TblamortizationTCM}] %s\n"
                                                                    "- [Comentarios generales]: %s\n",
-                         fila["var_escenario"], productall, lblcar, lblpricelist, tdaccessoriesamount, tdadditionalcoverageamount, tdextendedwarrantyamount, tdautopartstheftinsuranceamount,
+                         fila["var_escenario"], namecomplete, productall, lblcar, lblpricelist, tdaccessoriesamount, tdadditionalcoverageamount, tdextendedwarrantyamount,
+                         tdautopartstheftinsuranceamount,
                          tdInsuranceGAPAmount, tdTasa, tdPLazo, lblSeguroVd, tdSeguro, replace_divInsuranceRecipes, lblEnganche, '', tasaC2, plazoC2, tdComision, tdDesembolso, tdFinanciar,
-                         tdMensualidad, cat, namecomplete, cuotasall, Tblamortization, '', comments_all)
+                         tdMensualidad, cat, cuotasall, Tblamortization, '', comments_all)
             print("\033[1;32m-" * 1 + " FINISHED COTIZACIÓN" + "-\033[0m" * 1)
             time.sleep(10)
 
@@ -656,7 +645,7 @@ class MyTestCase(unittest.TestCase):
                 time.sleep(5)
 
                 callsolicitud = MyTestCaseSolicitud()
-                callsolicitud.datos_personales()
+                callsolicitud.solicitud_credito()
 
         except TimeoutException as e:
             error_message = f"Error en el escenario {fila['var_escenario']}: {str(e)}"
