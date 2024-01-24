@@ -6,7 +6,8 @@ import os
 import xlrd
 import logging
 import traceback
-import urllib3
+import random
+import string
 from datetime import datetime
 from selenium import webdriver
 from selenium.common import TimeoutException, NoSuchElementException
@@ -21,7 +22,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from faker import Faker
 from AUTO.Locator.locators import Locators
 from selenium.webdriver.edge.options import Options
-from AUTO.Test.SOL_DATOS_PERSONALES import MyTestCaseSolicitud
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "...", "..."))
 fake = Faker()
@@ -37,8 +37,15 @@ logging.basicConfig(filename=log_filename, level=logging.INFO, format='%(asctime
 class MyTestCase(unittest.TestCase):
     driver = None
 
+    # def get_random_string(length):
+    #     letters = string.ascii_uppercase
+    #     result_str = ''.join(random.choice(letters) for i in range(length))
+    #     print("Random", length, "is: ", result_str)
+    # get_random_string(3)
+
     def __init__(self, *args, **kwargs):
         super(MyTestCase, self).__init__(*args, **kwargs)
+        self.final_string = ""
         self.commentgap = ""
         self.commentrsa = ""
         self.commentge = ""
@@ -68,6 +75,18 @@ class MyTestCase(unittest.TestCase):
         self.cat = ''
         self.cuotasall = ''
         self.Tblamortization = ''
+
+    def get_string(self, letters_count, digits_count):
+        letters_count = 2
+        digits_count = 1
+        letters = ''.join((random.choice(string.ascii_uppercase) for i in range(letters_count)))
+        digits = ''.join((random.choice(string.digits) for i in range(digits_count)))
+        sample_list = list(letters + digits)
+        random.shuffle(sample_list)
+        self.final_string = ''.join(sample_list)
+        # print("random with letters", letters_count, 'letters', 'and', digits_count, 'digits', 'is', final_string)
+
+    #get_string(2, 1)
 
     @classmethod
     def setUpClass(cls):
@@ -135,7 +154,7 @@ class MyTestCase(unittest.TestCase):
                 "var_tbl_amortiza": sheet_quote.cell_value(numero_fila, 35),
                 "var_crearsolicitud": sheet_quote.cell_value(numero_fila, 36),
                 "var_clienteSNTD": sheet_quote.cell_value(numero_fila, 37),
-                "var_sexoh": sheet_quote.cell_value(numero_fila, 38),
+                "var_sexo_solicitud": sheet_quote.cell_value(numero_fila, 38),
                 "var_fechanac": sheet_quote.cell_value(numero_fila, 39),
                 "var_entidad": sheet_quote.cell_value(numero_fila, 40),
                 "var_homoclave": sheet_quote.cell_value(numero_fila, 41),
@@ -415,8 +434,7 @@ class MyTestCase(unittest.TestCase):
         quote = QuotePage(driver)
         try:
             # Obtiene la fecha del excel y lo convierte a formato "fecha"
-            fecha_excel = datetime.fromordinal(
-                datetime(1900, 1, 1).toordinal() + int(fila["var_fecha"]) - 2)
+            fecha_excel = datetime.fromordinal(datetime(1900, 1, 1).toordinal() + int(fila["var_fecha"]) - 2)
 
             # Sección de seguro de daños
             if fila["var_seguro_danos"] == "PRIMA MANUAL":
@@ -747,7 +765,6 @@ class MyTestCase(unittest.TestCase):
                 quote.click_si_confirm()
                 element_code = driver.find_element(By.XPATH, Locators.quote_divCodigoVerTemp)
                 element_code_text = driver.execute_script('return arguments[0].innerText;', element_code)
-                print(element_code_text)
                 time.sleep(1)
                 quote.codigo_verificacion(element_code_text)
                 time.sleep(1)
@@ -765,8 +782,24 @@ class MyTestCase(unittest.TestCase):
             print("\033[1;32m-" * 30 + " START SOLICITUD" + "-\033[0m" * 30)
             if fila["var_clienteSNTD"] == "SI":
                 solicitud.click_client_sntd()
+                random_buc = random.randint(00000000, 99999999)
+                solicitud.enter_buc(random_buc)
             else:
                 pass
+
+            if fila["var_sexo_solicitud"] == "HOMBRE":
+                solicitud.click_sexo_hombre()
+            else:
+                solicitud.click_sexo_mujer()
+
+            fecha_solicitud = datetime.fromordinal(datetime(1900, 1, 1).toordinal() + int(fila["var_fechanac"]) - 2)
+            solicitud.enter_fecha(fecha_solicitud.strftime('%d/%m/%Y'))
+
+            time.sleep(1)
+            solicitud.click_entidad_nac(fila["var_entidad"])
+            solicitud.enter_curp(self.final_string)
+
+            time.sleep(9)
         except TimeoutException as e:
             error_message = f"Error en el escenario {fila['var_escenario']}: {str(e)}"
             logging.error(error_message)
@@ -782,7 +815,5 @@ class MyTestCase(unittest.TestCase):
             logging.error(error_message + "validando en el log")
 
 
-# urllib3.disable_warnings()
-# logging.getLogger("urllib3").setLevel(logging.WARNING)
 if __name__ == '__main__':
     unittest.main()
