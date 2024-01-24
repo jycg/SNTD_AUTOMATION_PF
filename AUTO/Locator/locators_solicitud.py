@@ -1,7 +1,8 @@
-class Locatorssolicitud:
-    dp_clientesntd = 'rdoClientSTNDYes'  # ID
-    dp_hombre = 'rdoMale'  # ID
-    dp_mujer = 'rdoFemale'  # ID
+class Locatorsolicitud:
+    dp_clientesntd = '/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]/form[1]/div[1]/div[1]/div[3]/div[1]/label[1]/span[1]'  # XPATH
+    dp_txtBUC = 'txtBUC'  # ID
+    dp_hombre = '/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]/form[1]/div[1]/div[1]/div[12]/div[1]/label[1]/span[1]'  # XPATH
+    dp_mujer = '/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]/form[1]/div[1]/div[1]/div[12]/div[1]/label[2]/span[1]'  # XPATH
     dp_fecha = 'txdBirthDate'  # ID
     dp_pais = 'drpBirthCountry'  # ID
     dp_nacionalidad = 'drpNationality'  # ID
