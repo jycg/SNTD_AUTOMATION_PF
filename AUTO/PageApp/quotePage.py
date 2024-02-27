@@ -2,8 +2,6 @@ from AUTO.Locator.locators import Locators
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 
 class QuotePage:
@@ -17,10 +15,6 @@ class QuotePage:
     def enter_agencia(self, agencia):
         self.driver.find_element(By.XPATH, Locators.agencia_enter).send_keys(agencia, Keys.ENTER)
 
-    # def click_credito(self):
-    #     self.driver.find_element(By.ID, Locators.producto_credito).click()
-    # def click_credito_BYD(self):
-    #     self.driver.find_element(By.XPATH, Locators.producto_credito_BYD).click()
     def click_arrendamiento(self):
         self.driver.find_element(By.ID, Locators.producto_arrendamiento).click()
 

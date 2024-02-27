@@ -37,3 +37,8 @@ class SolicitudPage:
         self.driver.find_element(By.ID, Locatorsolicitud.dp_curp).send_keys(Keys.RIGHT)
         self.driver.find_element(By.ID, Locatorsolicitud.dp_curp).send_keys(Keys.RIGHT)
         self.driver.find_element(By.ID, Locatorsolicitud.dp_curp).send_keys(_curp)
+
+    def enter_homoclave(self, _homoclave):
+        self.driver.find_element(By.ID, Locatorsolicitud.dp_homoclave).click()
+        self.driver.find_element(By.ID, Locatorsolicitud.dp_homoclave).send_keys(Keys.CONTROL + "A")
+        self.driver.find_element(By.ID, Locatorsolicitud.dp_homoclave).send_keys(_homoclave)

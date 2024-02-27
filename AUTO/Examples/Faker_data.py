@@ -3,8 +3,7 @@ import random
 import xlrd
 import string
 
-
-location_quote = ("C:/Automation_Performance_Sast/SNTD_PCR_PM_SP8.xls")
+location_quote = "C:/Automation_Performance_Sast/SNTD_PCR_PM_SP8.xls"
 var_excel_quote = xlrd.open_workbook(location_quote)
 template_quote = var_excel_quote.sheet_by_index(0)
 
@@ -16,28 +15,28 @@ fake = Faker()
 # Condición para generar data y consumirse en script de PCR para PM
 # https://faker.readthedocs.io/en/stable/
 letters = string.ascii_lowercase
-#print ( ''.join(random.choice(letters) for i in range(1)) )
+# print ( ''.join(random.choice(letters) for i in range(1)) )
 
-for _ in range(200):
-    #print(random.randint(0, 9))
-    print(#''.join(random.choice(letters.upper()) for i in range(1)),
+for _ in range(180):
+    # print(random.randint(0, 9))
+    # print(  # ''.join(random.choice(letters.upper()) for i in range(1)),
+    #     random.randint(1, 9),
+    #     ''.join(random.choice(letters.upper()) for i in range(1)),
+    #     random.randint(1, 9),
+    #     sep='')
+    print(''.join(random.choice(letters)),
           random.randint(1, 9),
-          ''.join(random.choice(letters.upper()) for i in range(1)),
-        random.randint(1, 9),
+          ''.join(random.choice(letters)),
+          ',',
+          'GAVM950802,',
+          'MARTHA,',
+          'ELIZABETH,',
+          'GARCIA,',
+          'VILLA,',
+          'GAVM950802HJCRLR 32,',
+          '331-698-2655,',
+          '3316982655',
           sep='')
-    # print('PALOMA,',
-    #       'MONSERRTA,',
-    #       'GARCIA,',
-    #       'VILLA,',
-    #       'GAVP950802,',
-    #       ''.join(random.choice(letters) for i in range(1)),
-    #       random.randint(1, 9),
-    #       ''.join(random.choice(letters) for i in range(1)),
-    #       ',',
-    #       'GAVP950802HJCRLL 02,',
-    #       '331-696-5357,',
-    #       '3316965357',
-    #       sep='')
     # for f_comm_name in range(0, 1):
     #     for f_rfcPM in range(1, 2):
     #         for f_CELL_OS in range(2, 3):
@@ -94,5 +93,3 @@ for _ in range(200):
     #                           int(template_quote.cell_value(_, f_CELL_OS_v2)), random.randint(0000, 9999),
     #                           # telephone_OS_CELL_v2
     #                           sep='')
-
-

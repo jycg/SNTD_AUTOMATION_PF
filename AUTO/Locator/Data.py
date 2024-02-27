@@ -11,7 +11,7 @@ class Dataquote(unittest.TestCase):
         "var_canal": sheet_environment.cell_value(1, 2),
         "var_user": sheet_environment.cell_value(1, 3)
     }
-    print(fila_environment)
+    #print(fila_environment)
     sheet_quote = archivo_excel.sheet_by_index(1)
     for numero_fila in range(1, sheet_quote.nrows):
         fila = {
@@ -59,11 +59,12 @@ class Dataquote(unittest.TestCase):
             "var_homoclave": sheet_quote.cell_value(numero_fila, 41),
             "var_curp": sheet_quote.cell_value(numero_fila, 42),
             "var_edocivil": sheet_quote.cell_value(numero_fila, 43),
-            "var_dependientes": sheet_quote.cell_value(numero_fila, 44),
-            "var_nivelestudio": sheet_quote.cell_value(numero_fila, 45),
-            "var_ocupacion": sheet_quote.cell_value(numero_fila, 46),
+            "var_r_matrimonial": sheet_quote.cell_value(numero_fila, 44),
+            "var_dependientes": sheet_quote.cell_value(numero_fila, 45),
+            "var_nivelestudio": sheet_quote.cell_value(numero_fila, 46),
+            "var_ocupacion": sheet_quote.cell_value(numero_fila, 47),
         }
-        print(fila)
+        #print(fila)
 
     @classmethod
     def tearDownClass(cls):
