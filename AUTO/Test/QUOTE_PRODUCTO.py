@@ -22,6 +22,7 @@ def cotizador_producto(driver, fila, fila_environment):
     import time
     try:
         quote = QuotePage(driver)
+
         # Producto Financiero
         if fila["var_producto_finan"] == "ARRENDAMIENTO":
             quote.click_arrendamiento()

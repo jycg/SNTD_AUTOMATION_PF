@@ -1,32 +1,14 @@
-import re
 import time
-import unittest
 import sys
 import os
-import xlrd
 import logging
 import traceback
-import random
-import string
 from datetime import datetime
-from selenium import webdriver
-from selenium.common import TimeoutException, NoSuchElementException
+from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
-from AUTO.PageApp.loginPage import LoginPage
-from AUTO.PageApp.searchPage import SearchPage
 from AUTO.PageApp.quotePage import QuotePage
-from selenium.webdriver.edge.service import Service as EdgeService
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from faker import Faker
 from AUTO.Locator.locators import Locators
-from selenium.webdriver.edge.options import Options
-from DATAENTRY_DATOS_PERSONALES import solicita_credito, solicitud_datos_personales
-from QUOTE_PRODUCTO import cotizador_producto
-from QUOTE_PLAN import cotizador_plan_financiero
-from QUOTE_SEGURO import cotizador_seguro_de_auto
-from QUOTE_DETALLE_FINANCIAMIENTO import cotizador_detalle_financiamiento
-from QUOTE_DATOS_SOLICITANTE import cotizador_datos_solicitante
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "...", "..."))
 fake = Faker()

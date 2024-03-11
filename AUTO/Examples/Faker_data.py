@@ -17,7 +17,7 @@ fake = Faker()
 letters = string.ascii_lowercase
 # print ( ''.join(random.choice(letters) for i in range(1)) )
 
-for _ in range(180):
+for _ in range(210):
     # print(random.randint(0, 9))
     # print(  # ''.join(random.choice(letters.upper()) for i in range(1)),
     #     random.randint(1, 9),

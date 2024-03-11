@@ -13,5 +13,8 @@ class Locatorsolicitud:
     dp_dependientes = 'txiDependants'  # ID
     dp_nivelestudios = 'drpStudies'  # ID
     dp_ocupacion = 'drpProfession'  # ID
-    dp_lada = 'txtLADA'  # ID
-    dp_telefono = 'txtPhone'  # ID
+    dp_ZipCode = 'txtZipCode'  # ID
+    folio_cot = 'txhQuoteId'  # ID
+    label_domicilio = '//body/div[1]/div[2]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]/form[1]/div[1]/div[3]/p[1]'  # XPATH
+    dp_drpSuburb = 'drpSuburb'  # ID
+    dp_txtStreet = 'txtStreet'  # ID

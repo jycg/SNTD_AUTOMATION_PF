@@ -11,6 +11,9 @@ from AUTO.PageApp.quotePage import QuotePage
 from AUTO.PageApp.solicitudPage import SolicitudPage
 from faker import Faker
 from AUTO.Locator.locators import Locators
+from AUTO.Locator.locators_solicitud import Locatorsolicitud
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "...", "..."))
 fake = Faker()
@@ -33,6 +36,10 @@ def solicita_credito(driver, fila):
             quote.click_solicita_credito()
             time.sleep(1)
             quote.click_si_confirm()
+            time.sleep(1)
+            folio_value = driver.find_element(By.ID, "txhQuoteId")
+            folio_value_ = folio_value.get_attribute("value")
+            print("El folio de la cotizaciónes: ", folio_value_)
             element_code = driver.find_element(By.XPATH, Locators.quote_divCodigoVerTemp)
             element_code_text = driver.execute_script('return arguments[0].innerText;', element_code)
             time.sleep(1)
@@ -75,8 +82,27 @@ def solicitud_datos_personales(driver, fila):
         solicitud.enter_curp(txtCURP_)
         time.sleep(2)
         solicitud.enter_homoclave(fila["var_homoclave"])
+        solicitud.select_edo_civil(fila["var_edocivil"])
+        solicitud.enter_dependientes(fila["var_dependientes"])
+        solicitud.select_nivel_estudios(fila["var_nivelestudio"])
+        solicitud.select_ocupacion(fila["var_ocupacion"])
+        # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        driver.execute_script('window.scrollBy(0, 600)')
+        zipcode_input = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, Locatorsolicitud.dp_ZipCode))
+        )
+        zipcode_value = zipcode_input.get_attribute('value')
+        if not zipcode_value:
+            solicitud.enter_cp(fila["var_cp"])
+        else:
+            pass
 
-        #
+        solicitud.click_label()
+        solicitud.enter_colonia()
+
+        calle = fake.address()
+        characters = "'!?,"
+        calle = "".join(x for x in calle if x not in characters)  # Quita los caracteres especiales
 
         time.sleep(20)
     except TimeoutException as e:

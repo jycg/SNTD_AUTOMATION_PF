@@ -5,10 +5,14 @@ import os
 import logging
 import traceback
 from datetime import datetime
+import xlrd
 from selenium.common import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.by import By
 from faker import Faker
 from AUTO.Locator.locators import Locators
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import openpyxl
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "...", "..."))
 fake = Faker()
@@ -23,6 +27,7 @@ logging.basicConfig(filename=log_filename, level=logging.INFO, format='%(asctime
 
 def cotizador_detalle_financiamiento(self, driver, fila):
     try:
+
         # Producto
         self.productall = "Prodcuto financiero: {}, Tipo de Producto: {}, Uso: {}, Tipo de Persona: {}" \
             .format(fila["var_producto_finan"], fila["var_tipo_producto"], fila["var_tipo_uso"], fila["var_tipo_persona"])
@@ -56,28 +61,60 @@ def cotizador_detalle_financiamiento(self, driver, fila):
             .format(txtpay12, txtpay24, txtpay36, txtpay48, txtpay60, txtpay72)
         time.sleep(1)
 
+        def wait_and_get_text(driver, locator):
+            try:
+                element = WebDriverWait(driver, 10).until(
+                    EC.visibility_of_element_located((By.ID, locator))
+                )
+                return element.text
+            except Exception as a:
+                print(f"Se generó un problema al obtener el elemento {locator}. O en su caso, no está visible en la aplicación. {a}")
+                return ""
+
         # Vehículo
-        self.lblcar = self.driver.find_element(By.ID, Locators.amortizationdetail_lblCar).text
+        self.lblcar = wait_and_get_text(self.driver, Locators.amortizationdetail_lblCar)
         # Valor del Vehículo
-        self.lblpricelist = self.driver.find_element(By.ID, Locators.amortizationdetail_lblPriceList).text
+        self.lblpricelist = wait_and_get_text(self.driver, Locators.amortizationdetail_lblPriceList)
         # Accesorios Vehículo
-        self.tdaccessoriesamount = self.driver.find_element(By.ID, 'tdAccessoriesAmount').text
+        self.tdaccessoriesamount = wait_and_get_text(self.driver, 'tdAccessoriesAmount')
         # Coberturas Adicionales
-        self.tdadditionalcoverageamount = self.driver.find_element(By.ID, 'tdAdditionalCoverageAmount').text
+        self.tdadditionalcoverageamount = wait_and_get_text(self.driver, 'tdAdditionalCoverageAmount')
         # Garantía Extendida
-        self.tdextendedwarrantyamount = self.driver.find_element(By.ID, 'tdExtendedWarrantyAmount').text
+        self.tdextendedwarrantyamount = wait_and_get_text(self.driver, 'tdExtendedWarrantyAmount')
         # Seguro de Robo de Autopartes
-        self.tdautopartstheftinsuranceamount = self.driver.find_element(By.ID, 'tdAutoPartsTheftInsuranceAmount').text
+        self.tdautopartstheftinsuranceamount = wait_and_get_text(self.driver, 'tdAutoPartsTheftInsuranceAmount')
         # Seguro GAP
-        self.tdInsuranceGAPAmount = self.driver.find_element(By.ID, 'tdInsuranceGAPAmount').text
+        self.tdInsuranceGAPAmount = wait_and_get_text(self.driver, 'tdInsuranceGAPAmount')
         # Tasa Fija
-        self.tdTasa = self.driver.find_element(By.ID, 'tdTasa').text
+        self.tdTasa = wait_and_get_text(self.driver, 'tdTasa')
         # Plazo
-        self.tdPLazo = self.driver.find_element(By.ID, 'tdPLazo').text
+        self.tdPLazo = wait_and_get_text(self.driver, 'tdPLazo')
         # Seguro de Vida y Desempleo
-        self.lblSeguroVd = self.driver.find_element(By.ID, 'lblSeguroVd').text
+        self.lblSeguroVd = wait_and_get_text(self.driver, 'lblSeguroVd')
         # Seguro del vehículo Año 1
-        self.tdSeguro = self.driver.find_element(By.ID, 'tdSeguro').text
+        self.tdSeguro = wait_and_get_text(self.driver, 'tdSeguro')
+
+        # self.lblcar = self.driver.find_element(By.ID, Locators.amortizationdetail_lblCar).text
+        # # Valor del Vehículo
+        # self.lblpricelist = self.driver.find_element(By.ID, Locators.amortizationdetail_lblPriceList).text
+        # # Accesorios Vehículo
+        # self.tdaccessoriesamount = self.driver.find_element(By.ID, 'tdAccessoriesAmount').text
+        # # Coberturas Adicionales
+        # self.tdadditionalcoverageamount = self.driver.find_element(By.ID, 'tdAdditionalCoverageAmount').text
+        # # Garantía Extendida
+        # self.tdextendedwarrantyamount = self.driver.find_element(By.ID, 'tdExtendedWarrantyAmount').text
+        # # Seguro de Robo de Autopartes
+        # self.tdautopartstheftinsuranceamount = self.driver.find_element(By.ID, 'tdAutoPartsTheftInsuranceAmount').text
+        # # Seguro GAP
+        # self.tdInsuranceGAPAmount = self.driver.find_element(By.ID, 'tdInsuranceGAPAmount').text
+        # # Tasa Fija
+        # self.tdTasa = self.driver.find_element(By.ID, 'tdTasa').text
+        # # Plazo
+        # self.tdPLazo = self.driver.find_element(By.ID, 'tdPLazo').text
+        # # Seguro de Vida y Desempleo
+        # self.lblSeguroVd = self.driver.find_element(By.ID, 'lblSeguroVd').text
+        # # Seguro del vehículo Año 1
+        # self.tdSeguro = self.driver.find_element(By.ID, 'tdSeguro').text
 
         def limpiar_subsecuente(texto):
             texto_limpio = re.sub(r'[^\d.]+', '', texto)

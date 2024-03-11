@@ -1,4 +1,3 @@
-import re
 import time
 import unittest
 import sys
@@ -6,20 +5,14 @@ import os
 import xlrd
 import logging
 import traceback
-import random
-import string
 from datetime import datetime
 from selenium import webdriver
-from selenium.common import TimeoutException, NoSuchElementException
-from selenium.webdriver.common.by import By
+from selenium.common import TimeoutException
 from AUTO.PageApp.loginPage import LoginPage
 from AUTO.PageApp.searchPage import SearchPage
 from AUTO.PageApp.quotePage import QuotePage
 from selenium.webdriver.edge.service import Service as EdgeService
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from faker import Faker
-from AUTO.Locator.locators import Locators
 from selenium.webdriver.edge.options import Options
 from DATAENTRY_DATOS_PERSONALES import solicita_credito, solicitud_datos_personales
 from QUOTE_PRODUCTO import cotizador_producto
@@ -28,7 +21,8 @@ from QUOTE_SEGURO import cotizador_seguro_de_auto
 from QUOTE_DETALLE_FINANCIAMIENTO import cotizador_detalle_financiamiento
 from QUOTE_DATOS_SOLICITANTE import cotizador_datos_solicitante
 from QUOTE_IMPRIMIR import cotizador_imprimir
-from LOG import cotizador_log
+from openpyxl import load_workbook
+import locale
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "...", "..."))
 fake = Faker()
@@ -93,6 +87,9 @@ class MyTestCase(unittest.TestCase):
         cls.driver.maximize_window()
 
     def test_cotizador_valid(self):
+        # SECCIÓN PARA OBTENER DATOS DE EXCEL
+
+        # DATOS DEL AMBIENTE
         archivo_excel = xlrd.open_workbook('C:/Automation_Performance_Sast/SNTD_QUOTE_PF_TEST.xls')
         sheet_environment = archivo_excel.sheet_by_index(0)
         fila_environment = {
@@ -102,6 +99,117 @@ class MyTestCase(unittest.TestCase):
             "var_user": sheet_environment.cell_value(1, 3)
         }
         print(fila_environment)
+
+        # DATOS DE LA COTIZACIÓN PARA VALIDAR LOS ASSERT
+        name_tab = 'Cotizador'
+        cot_excel = load_workbook(filename='C:/Automation_Performance_Sast/Cotizador_CAT_2.xlsm', data_only=True)
+        # sheet_cot = cot_excel[name_tab]
+        sheet_cot = cot_excel[name_tab]
+        fila_cot = {
+            "precio_vehiculo": sheet_cot.cell(row=5, column=3).value,
+            "enganche": sheet_cot.cell(row=6, column=3).value,
+            "aforo": sheet_cot.cell(row=7, column=3).value,
+            "seguro_danos_1": sheet_cot.cell(row=11, column=3).value,
+            "seguro_danos_2": sheet_cot.cell(row=12, column=3).value,
+            "seguro_danos_subsecuente": sheet_cot.cell(row=13, column=3).value,
+            "suma_subsecuente": sheet_cot.cell(row=14, column=3).value,
+            "seguro_vida": sheet_cot.cell(row=15, column=3).value,
+            "accesorios_garantia_financiado": sheet_cot.cell(row=16, column=3).value,
+            "accesorios_garantia_contado": sheet_cot.cell(row=17, column=3).value,
+            "garantia_extendida": sheet_cot.cell(row=14, column=4).value,
+            "seguro_autoparte": sheet_cot.cell(row=16, column=4).value,
+            "seguro_gap_porcentaje": sheet_cot.cell(row=18, column=5).value,
+            "seguro_gap_monto": sheet_cot.cell(row=18, column=4).value,
+            "accesorios": sheet_cot.cell(row=20, column=4).value,
+            "coberturas": sheet_cot.cell(row=22, column=4).value,
+            "monto_financiar": sheet_cot.cell(row=18, column=3).value,
+            "plazo": sheet_cot.cell(row=19, column=3).value,
+            "tasa": sheet_cot.cell(row=20, column=3).value,
+            "comision_porcentaje": sheet_cot.cell(row=21, column=3).value,
+            "comision_monto": sheet_cot.cell(row=22, column=3).value,
+            "desembolso": sheet_cot.cell(row=24, column=3).value,
+            "CAT": sheet_cot.cell(row=26, column=3).value,
+            "fecha": sheet_cot.cell(row=1, column=9).value,
+            "fecha_pago_0": sheet_cot.cell(row=35, column=3).value,
+            "interes_0": sheet_cot.cell(row=35, column=6).value,
+            "iva_interes_0": sheet_cot.cell(row=35, column=8).value,
+            "mensualidad_0": sheet_cot.cell(row=35, column=9).value,
+        }
+        print(fila_cot)
+        locale.setlocale(locale.LC_ALL, '')
+        quote_precio_vehiculo = locale.currency(fila_cot["precio_vehiculo"], grouping=True)
+        quote_enganche = locale.currency(fila_cot["enganche"], grouping=True)
+        quote_aforo = locale.currency(fila_cot["aforo"], grouping=True)
+        quote_seguro_danos_1 = locale.currency(fila_cot["seguro_danos_1"], grouping=True)
+        quote_seguro_danos_2 = locale.currency(fila_cot["seguro_danos_2"], grouping=True)
+        quote_seguro_danos_subsecuente = locale.currency(fila_cot["seguro_danos_subsecuente"], grouping=True)
+        quote_suma_subsecuente = locale.currency(fila_cot["suma_subsecuente"], grouping=True)
+        quote_seguro_vida = locale.currency(fila_cot["seguro_vida"], grouping=True)
+        quote_ge_acc_financiado = locale.currency(fila_cot["accesorios_garantia_financiado"], grouping=True)
+        quote_ge_acc_contado = locale.currency(fila_cot["accesorios_garantia_contado"], grouping=True)
+        quote_garantia_extendida = locale.currency(fila_cot["garantia_extendida"], grouping=True)
+        quote_seguro_autoparte = locale.currency(fila_cot["seguro_autoparte"], grouping=True)
+        quote_seguro_gap_porcentaje = format(fila_cot["seguro_gap_porcentaje"], ".1%")
+        quote_seguro_gap_monto = locale.currency(fila_cot["seguro_gap_monto"], grouping=True)
+        quote_accesorios_financiados = locale.currency(fila_cot["accesorios"], grouping=True)
+        quote_coberturas = locale.currency(fila_cot["coberturas"], grouping=True)
+        quote_monto_financiar = locale.currency(fila_cot["monto_financiar"], grouping=True)
+        quote_plazo = fila_cot["plazo"]
+        quote_tasa = format(fila_cot["tasa"], ".2%")
+        quote_comision_porcentaje = format(fila_cot["comision_porcentaje"], ".2%")
+        quote_comision_monto = locale.currency(fila_cot["comision_monto"], grouping=True)
+        quote_desembolso = locale.currency(fila_cot["desembolso"], grouping=True)
+        quote_cat = format(fila_cot["CAT"], ".1%")
+        quote_fecha = fila_cot["fecha"].strftime("%Y-%m-%d")
+        quote_fecha_pago_0 = fila_cot["fecha_pago_0"].strftime("%Y-%m-%d")
+        info_0 = (
+            f"Fecha de pago: {quote_fecha_pago_0}",
+            f"Interés: {locale.currency(fila_cot['interes_0'], grouping=True)}",
+            f"IVA de interés: {locale.currency(fila_cot['iva_interes_0'], grouping=True)}",
+            f"Pago Mensual: {locale.currency(fila_cot['mensualidad_0'], grouping=True)}"
+        )
+        _info_0 = ', '.join(info_0)
+
+        print("\033[1;32m_" * 10 + " DATOS DEL SIMULADOR DEL EXCEL ", "_\033[0m" * 10)
+        print(
+            "Precio del Vehículo: ", quote_precio_vehiculo,
+            "\nEnganche: ", quote_enganche,
+            "\nAforo: ", quote_aforo,
+            "\nSeguro de Daños Año 1: ", quote_seguro_danos_1,
+            "\nSeguro de Daños Año 2: ", quote_seguro_danos_2,
+            "\nSeguro de Daños Subsecuentes: ", quote_seguro_danos_subsecuente,
+            "\nSuma subsecuentes : ", quote_suma_subsecuente,
+            "\nSeguro de Vida y Desempleo: ", quote_seguro_vida,
+            "\nGarantía y/o Accesorios Financiados: ", quote_ge_acc_financiado,
+            "\nGarantía y/o Accesorios Contado: ", quote_ge_acc_contado,
+            "\nGarantía Extendida: ", quote_garantia_extendida,
+            "\nSeguro Robo Autopartes: ", quote_seguro_autoparte,
+            "\nSeguro GAP Porcentaje: ", quote_seguro_gap_porcentaje,
+            "\nSeguro GAP Monto: ", quote_seguro_gap_monto,
+            "\nAccesorios: ", quote_accesorios_financiados,
+            "\nCoberturas Adicionales: ", quote_coberturas,
+            "\nMonto a Financiar en Cotización: ", quote_monto_financiar,
+            "\nPlazo (meses): ", quote_plazo,
+            "\nTasa: ", quote_tasa,
+            "\nComisión por Apertura %: ", quote_comision_porcentaje,
+            "\nComisión por Apertura con IVA: ", quote_comision_monto,
+            "\nDesembolso Inicial: ", quote_desembolso,
+            "\nCAT AUTOMOTRIZ: ", quote_cat,
+            "\nFecha: ", quote_fecha,
+            "\nDatos No. Pago 0: ", _info_0,
+
+        )
+        print("\033[1;32m_" * 20, "_\033[0m" * 20)
+
+        # try:
+        #     self.assertEqual(EX_seguro_danos_1, EX_seguro_danos_2)
+        #     print("Assert correcto")
+        #     print(EX_seguro_danos_1, EX_seguro_danos_2)
+        # except AssertionError:
+        #     print("Entró al AssertionError")
+        #     print(EX_seguro_danos_1, EX_seguro_danos_2)
+
+        # DATOS DE LA COTIZACIÓN, CLIENTE Y SOLICITUD
         sheet_quote = archivo_excel.sheet_by_index(1)
         for numero_fila in range(1, sheet_quote.nrows):
             fila = {
@@ -170,7 +278,6 @@ class MyTestCase(unittest.TestCase):
                 self.cotizador_imprimir(fila)
                 self.cotizador_log(fila)
                 self.solicita_credito(fila)
-                # self.solicitud_datos_personales(fila)
             except Exception as e:
                 error_message = f"Error en el escenario {fila['var_escenario']}: {str(e)}"
                 logging.error(error_message)
@@ -183,6 +290,7 @@ class MyTestCase(unittest.TestCase):
             login = LoginPage(driver)
             search = SearchPage(driver)
             quote = QuotePage(driver)
+            driver.close()
             print("                                                                    ")
             print("\033[1;32m*" * 30 + " ESCENARIO # ", fila["var_escenario"], "*\033[0m" * 30)
             if fila_environment["var_environment"] == "BYD_QA":
@@ -236,8 +344,6 @@ class MyTestCase(unittest.TestCase):
 
     def cotizador_log(self, fila):
         try:
-            driver = self.driver
-            driver.save_screenshot('screenshotsssssss.png')
             print("\033[1;32m-" * 1 + " DATOS DEL SOLICITANTE EXITOSO " + "-\033[0m" * 1)
             comments_all = "GAP: {}, SRA: {}, GE: {}".format(self.commentgap, self.commentrsa, self.commentge)
             # Guarda información en el log
@@ -281,63 +387,6 @@ class MyTestCase(unittest.TestCase):
             logging.error(error_message)
             traceback.print_exc()
 
-    # def solicita_credito(self, fila):
-    #     driver = self.driver
-    #     quote = QuotePage(driver)
-    #     try:
-    #         if fila["var_crearsolicitud"] == "NO":
-    #             pass
-    #         else:
-    #             # SOLICITA CRÉDITO
-    #             quote.click_solicita_credito()
-    #             time.sleep(1)
-    #             quote.click_si_confirm()
-    #             element_code = driver.find_element(By.XPATH, Locators.quote_divCodigoVerTemp)
-    #             element_code_text = driver.execute_script('return arguments[0].innerText;', element_code)
-    #             time.sleep(1)
-    #             quote.codigo_verificacion(element_code_text)
-    #             time.sleep(1)
-    #             quote.click_btnGotoCreditform()
-    #             time.sleep(5)
-    #
-    #             self.solicitud_datos_personales(fila)
-    #     except TimeoutException as e:
-    #         error_message = f"Error en el escenario {fila['var_escenario']}: {str(e)}"
-    #         logging.error(error_message)
-    #         traceback.print_exc()
-    #
-    # def solicitud_datos_personales(self, fila):
-    #     driver = self.driver
-    #     solicitud = SolicitudPage(driver)
-    #     try:
-    #         print("\033[1;32m-" * 30 + " START SOLICITUD" + "-\033[0m" * 30)
-    #         if fila["var_clienteSNTD"] == "SI":
-    #             solicitud.click_client_sntd()
-    #             random_buc = random.randint(00000000, 99999999)
-    #             solicitud.enter_buc(random_buc)
-    #         else:
-    #             pass
-    #
-    #         if fila["var_sexo_solicitud"] == "HOMBRE":
-    #             solicitud.click_sexo_hombre()
-    #         else:
-    #             solicitud.click_sexo_mujer()
-    #
-    #         fecha_solicitud = datetime.fromordinal(datetime(1900, 1, 1).toordinal() + int(fila["var_fechanac"]) - 2)
-    #         solicitud.enter_fecha(fecha_solicitud.strftime('%d/%m/%Y'))
-    #
-    #         time.sleep(1)
-    #         self.txtCURP = self.driver.find_element(By.ID, 'txtCURP').text
-    #         txtCURP_ = self.txtCURP + " 02"
-    #         solicitud.click_entidad_nac(fila["var_entidad"])
-    #         time.sleep(2)
-    #         solicitud.enter_curp(txtCURP_)
-    #
-    #         time.sleep(12)
-    #     except TimeoutException as e:
-    #         error_message = f"Error en el escenario {fila['var_escenario']}: {str(e)}"
-    #         logging.error(error_message)
-    #         traceback.print_exc()
     def solicita_credito(self, fila):
         solicita_credito(self.driver, fila)
 

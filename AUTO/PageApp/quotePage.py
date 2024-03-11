@@ -2,6 +2,9 @@ from AUTO.Locator.locators import Locators
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
 
 
 class QuotePage:
@@ -10,13 +13,31 @@ class QuotePage:
 
     # PRODUCTO
     def click_agencia(self):
-        self.driver.find_element(By.XPATH, Locators.agencia_click).click()
+        try:
+            agencia_element = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, Locators.agencia_click))
+            )
+            agencia_element.click()
+        except Exception as e:
+            print(f"Error al hacer clic en agencia: {e}")
 
     def enter_agencia(self, agencia):
-        self.driver.find_element(By.XPATH, Locators.agencia_enter).send_keys(agencia, Keys.ENTER)
+        try:
+            agencia_input = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, Locators.agencia_enter))
+            )
+            agencia_input.send_keys(agencia, Keys.ENTER)
+        except Exception as e:
+            print(f"Error al ingresar agencia: {e}")
 
     def click_arrendamiento(self):
-        self.driver.find_element(By.ID, Locators.producto_arrendamiento).click()
+        try:
+            arrendamiento_element = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.ID, Locators.producto_arrendamiento))
+            )
+            arrendamiento_element.click()
+        except Exception as e:
+            print(f"Error al hacer clic en arrendamiento: {e}")
 
     def click_tipon(self):
         self.driver.find_element(By.XPATH, Locators.producto_tipo_n).click()
