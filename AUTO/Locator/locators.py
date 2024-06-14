@@ -13,14 +13,14 @@ class Locators:
     agencia_click = "//span[@id='select2-cboAgencies-container']"
     agencia_enter = "//body/span[1]/span[1]/span[1]/input[1]"
     producto_arrendamiento = "TpPrdFinAP"  # ID
-    producto_tipo_n = "//body/div[1]/div[2]/div[1]/div[1]/div[3]/div[2]/div[1]/div[1]/input[1]"  # XPATH
+    producto_tipo_n = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[4]/div[2]/div[1]/div[1]/input[1]"  # XPATH
     producto_tipo_n_BYD = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[2]/div[1]/div[1]/input[1]"
     producto_tipo_n_OM = "/html[1]/body[1]/div[2]/div[2]/div[1]/div[1]/div[2]/div[2]/div[1]/div[1]/input[1]"
-    producto_tipo_s = "//body/div[1]/div[2]/div[1]/div[1]/div[3]/div[2]/div[1]/div[2]/input[1]"  # XPATH
+    producto_tipo_s = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[4]/div[2]/div[1]/div[2]/input[1]"  # XPATH
     producto_tipo_s_OM = "/html[1]/body[1]/div[2]/div[2]/div[1]/div[1]/div[2]/div[2]/div[1]/div[2]/input[1]"
-    producto_tipo_m = "//body/div[1]/div[2]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/input[1]"  # XPATH
+    producto_tipo_m = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[4]/div[2]/div[1]/div[3]/input[1]"  # XPATH
     producto_tipo_m_OM = "/html[1]/body[1]/div[2]/div[2]/div[1]/div[1]/div[2]/div[2]/div[1]/div[3]/input[1]"  # XPATH
-    producto_uso_p = "//body/div[1]/div[2]/div[1]/div[1]/div[3]/div[3]/div[1]/div[1]/input[1]"  # XPATH
+    producto_uso_p = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[4]/div[3]/div[1]/div[1]/input[1]"  # XPATH
     producto_uso_p_BYD = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[3]/div[1]/div[1]/input[1]"
     producto_uso_cp = "opUsePrivate"  # ID
     producto_uso_c = "opUseComercial"  # ID
@@ -114,7 +114,7 @@ class Locators:
     information_cellphone = "txtCelphone"  # ID
     information_cellcompany_click = "cboPhoneCompany"  # ID
     information_email = "txtMail"  # ID
-    quote_check_aviso_click_1 = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/div[10]/div[11]/label[2]/span[1]/span[1]"  # XPATH
+    quote_check_aviso_click_1 = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/div[10]/label[2]/span[1]/span[1]"  # XPATH
     quote_check_aviso_click_2 = "/html[1]/body[1]/div[8]/div[1]/div[1]/div[2]/div[1]/div[1]/label[1]/span[1]/span[1]"
     quote_check_aviso_msj_click = "//button[@id='btnNoticeOfPrivacyOk']"  # XPAT
     quote_imprimir_click = "btnImpCot"  # ID

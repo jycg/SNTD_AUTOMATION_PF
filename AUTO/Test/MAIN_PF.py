@@ -23,6 +23,7 @@ from QUOTE_DATOS_SOLICITANTE import cotizador_datos_solicitante
 from QUOTE_IMPRIMIR import cotizador_imprimir
 from openpyxl import load_workbook
 import locale
+from AUTO.PageApp.quotePagePM import QuotePagePM
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "...", "..."))
 fake = Faker()
@@ -73,7 +74,7 @@ class MyTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        s = "C:/Users/jgarcia/PycharmProjects/SNTDProject/drivers/Edge/121/msedgedriver.exe"
+        s = "C:/Users/jgarcia/PycharmProjects/SNTDProject/drivers/Edge/126/msedgedriver.exe"
         edge_service = EdgeService(s)
         edge_options = Options()
         edge_options.add_argument('--ignore-certificate-errors')
@@ -134,6 +135,26 @@ class MyTestCase(unittest.TestCase):
             "interes_0": sheet_cot.cell(row=35, column=6).value,
             "iva_interes_0": sheet_cot.cell(row=35, column=8).value,
             "mensualidad_0": sheet_cot.cell(row=35, column=9).value,
+            "fecha_pago_1": sheet_cot.cell(row=36, column=3).value,
+            "capital_1": sheet_cot.cell(row=36, column=5).value,
+            "interes_1": sheet_cot.cell(row=36, column=6).value,
+            "iva_interes_1": sheet_cot.cell(row=36, column=8).value,
+            "mensualidad_1": sheet_cot.cell(row=36, column=9).value,
+            "fecha_pago_13": sheet_cot.cell(row=48, column=3).value,
+            "capital_13": sheet_cot.cell(row=48, column=5).value,
+            "interes_13": sheet_cot.cell(row=48, column=6).value,
+            "iva_interes_13": sheet_cot.cell(row=48, column=8).value,
+            "mensualidad_13": sheet_cot.cell(row=48, column=9).value,
+            "fecha_pago_25": sheet_cot.cell(row=60, column=3).value,
+            "capital_25": sheet_cot.cell(row=60, column=5).value,
+            "interes_25": sheet_cot.cell(row=60, column=6).value,
+            "iva_interes_25": sheet_cot.cell(row=60, column=8).value,
+            "mensualidad_25": sheet_cot.cell(row=60, column=9).value,
+            "fecha_pago_37": sheet_cot.cell(row=72, column=3).value,
+            "capital_37": sheet_cot.cell(row=72, column=5).value,
+            "interes_37": sheet_cot.cell(row=72, column=6).value,
+            "iva_interes_37": sheet_cot.cell(row=72, column=8).value,
+            "mensualidad_37": sheet_cot.cell(row=72, column=9).value,
         }
         print(fila_cot)
         locale.setlocale(locale.LC_ALL, '')
@@ -160,8 +181,8 @@ class MyTestCase(unittest.TestCase):
         quote_comision_monto = locale.currency(fila_cot["comision_monto"], grouping=True)
         quote_desembolso = locale.currency(fila_cot["desembolso"], grouping=True)
         quote_cat = format(fila_cot["CAT"], ".1%")
-        quote_fecha = fila_cot["fecha"].strftime("%Y-%m-%d")
-        quote_fecha_pago_0 = fila_cot["fecha_pago_0"].strftime("%Y-%m-%d")
+        quote_fecha = fila_cot["fecha"].strftime("%d-%m-%Y")
+        quote_fecha_pago_0 = fila_cot["fecha_pago_0"].strftime("%d-%m-%Y")
         info_0 = (
             f"Fecha de pago: {quote_fecha_pago_0}",
             f"Interés: {locale.currency(fila_cot['interes_0'], grouping=True)}",
@@ -169,45 +190,91 @@ class MyTestCase(unittest.TestCase):
             f"Pago Mensual: {locale.currency(fila_cot['mensualidad_0'], grouping=True)}"
         )
         _info_0 = ', '.join(info_0)
-
-        print("\033[1;32m_" * 10 + " DATOS DEL SIMULADOR DEL EXCEL ", "_\033[0m" * 10)
-        print(
-            "Precio del Vehículo: ", quote_precio_vehiculo,
-            "\nEnganche: ", quote_enganche,
-            "\nAforo: ", quote_aforo,
-            "\nSeguro de Daños Año 1: ", quote_seguro_danos_1,
-            "\nSeguro de Daños Año 2: ", quote_seguro_danos_2,
-            "\nSeguro de Daños Subsecuentes: ", quote_seguro_danos_subsecuente,
-            "\nSuma subsecuentes : ", quote_suma_subsecuente,
-            "\nSeguro de Vida y Desempleo: ", quote_seguro_vida,
-            "\nGarantía y/o Accesorios Financiados: ", quote_ge_acc_financiado,
-            "\nGarantía y/o Accesorios Contado: ", quote_ge_acc_contado,
-            "\nGarantía Extendida: ", quote_garantia_extendida,
-            "\nSeguro Robo Autopartes: ", quote_seguro_autoparte,
-            "\nSeguro GAP Porcentaje: ", quote_seguro_gap_porcentaje,
-            "\nSeguro GAP Monto: ", quote_seguro_gap_monto,
-            "\nAccesorios: ", quote_accesorios_financiados,
-            "\nCoberturas Adicionales: ", quote_coberturas,
-            "\nMonto a Financiar en Cotización: ", quote_monto_financiar,
-            "\nPlazo (meses): ", quote_plazo,
-            "\nTasa: ", quote_tasa,
-            "\nComisión por Apertura %: ", quote_comision_porcentaje,
-            "\nComisión por Apertura con IVA: ", quote_comision_monto,
-            "\nDesembolso Inicial: ", quote_desembolso,
-            "\nCAT AUTOMOTRIZ: ", quote_cat,
-            "\nFecha: ", quote_fecha,
-            "\nDatos No. Pago 0: ", _info_0,
-
+        quote_fecha_pago_1 = fila_cot["fecha_pago_1"].strftime("%d-%m-%Y")
+        info_1 = (
+            f"Fecha de pago: {quote_fecha_pago_1}",
+            f"Capital: {locale.currency(fila_cot['capital_1'], grouping=True)}",
+            f"Interés: {locale.currency(fila_cot['interes_1'], grouping=True)}",
+            f"IVA de interés: {locale.currency(fila_cot['iva_interes_1'], grouping=True)}",
+            f"Pago Mensual: {locale.currency(fila_cot['mensualidad_1'], grouping=True)}"
         )
-        print("\033[1;32m_" * 20, "_\033[0m" * 20)
+        _info_1 = ', '.join(info_1)
+        if fila_cot["fecha_pago_13"] is not None:
+            quote_fecha_pago_13 = fila_cot["fecha_pago_13"].strftime("%d-%m-%Y")
+            capital_13 = locale.currency(fila_cot['capital_13'], grouping=True)
+            interes_13 = locale.currency(fila_cot['interes_13'], grouping=True)
+            iva_interes_13 = locale.currency(fila_cot['iva_interes_13'], grouping=True)
+            mensualidad_13 = locale.currency(fila_cot['mensualidad_13'], grouping=True)
+        else:
+            quote_fecha_pago_13 = 'NA'
+            capital_13 = 'NA'
+            interes_13 = 'NA'
+            iva_interes_13 = 'NA'
+            mensualidad_13 = 'NA'
 
-        # try:
-        #     self.assertEqual(EX_seguro_danos_1, EX_seguro_danos_2)
-        #     print("Assert correcto")
-        #     print(EX_seguro_danos_1, EX_seguro_danos_2)
-        # except AssertionError:
-        #     print("Entró al AssertionError")
-        #     print(EX_seguro_danos_1, EX_seguro_danos_2)
+        info_13 = (
+            f"Fecha de pago: {quote_fecha_pago_13}",
+            f"Capital: {capital_13}",
+            f"Interés: {interes_13}",
+            f"IVA de interés: {iva_interes_13}",
+            f"Pago Mensual: {mensualidad_13}"
+        )
+        _info_13 = ', '.join(info_13)
+
+        if fila_cot["fecha_pago_25"] is not None:
+            quote_fecha_pago_25 = fila_cot["fecha_pago_25"].strftime("%d-%m-%Y")
+            capital_25 = locale.currency(fila_cot['capital_25'], grouping=True)
+            interes_25 = locale.currency(fila_cot['interes_25'], grouping=True)
+            iva_interes_25 = locale.currency(fila_cot['iva_interes_25'], grouping=True)
+            mensualidad_25 = locale.currency(fila_cot['mensualidad_25'], grouping=True)
+        else:
+            quote_fecha_pago_25 = 'NA'
+            capital_25 = 'NA'
+            interes_25 = 'NA'
+            iva_interes_25 = 'NA'
+            mensualidad_25 = 'NA'
+
+        info_25 = (
+            f"Fecha de pago: {quote_fecha_pago_25}",
+            f"Capital: {capital_25}",
+            f"Interés: {interes_25}",
+            f"IVA de interés: {iva_interes_25}",
+            f"Pago Mensual: {mensualidad_25}"
+        )
+        _info_25 = ', '.join(info_25)
+
+        # print("\033[1;32m_" * 10 + " DATOS DEL SIMULADOR DEL EXCEL ", "_\033[0m" * 10)
+        # print(
+        #     "Precio del Vehículo: ", quote_precio_vehiculo,
+        #     "\nEnganche: ", quote_enganche,
+        #     "\nAforo: ", quote_aforo,
+        #     "\nSeguro de Daños Año 1: ", quote_seguro_danos_1,
+        #     "\nSeguro de Daños Año 2: ", quote_seguro_danos_2,
+        #     "\nSeguro de Daños Subsecuentes: ", quote_seguro_danos_subsecuente,
+        #     "\nSuma subsecuentes : ", quote_suma_subsecuente,
+        #     "\nSeguro de Vida y Desempleo: ", quote_seguro_vida,
+        #     "\nGarantía y/o Accesorios Financiados: ", quote_ge_acc_financiado,
+        #     "\nGarantía y/o Accesorios Contado: ", quote_ge_acc_contado,
+        #     "\nGarantía Extendida: ", quote_garantia_extendida,
+        #     "\nSeguro Robo Autopartes: ", quote_seguro_autoparte,
+        #     "\nSeguro GAP Porcentaje: ", quote_seguro_gap_porcentaje,
+        #     "\nSeguro GAP Monto: ", quote_seguro_gap_monto,
+        #     "\nAccesorios: ", quote_accesorios_financiados,
+        #     "\nCoberturas Adicionales: ", quote_coberturas,
+        #     "\nMonto a Financiar en Cotización: ", quote_monto_financiar,
+        #     "\nPlazo (meses): ", quote_plazo,
+        #     "\nTasa: ", quote_tasa,
+        #     "\nComisión por Apertura %: ", quote_comision_porcentaje,
+        #     "\nComisión por Apertura con IVA: ", quote_comision_monto,
+        #     "\nDesembolso Inicial: ", quote_desembolso,
+        #     "\nCAT AUTOMOTRIZ: ", quote_cat,
+        #     "\nFecha: ", quote_fecha,
+        #     "\nDatos No. Pago 0: ", _info_0,
+        #     "\nDatos No. Pago 1: ", _info_1,
+        #     "\nDatos No. Pago 13: ", _info_13,
+        #     "\nDatos No. Pago 25: ", _info_25,
+        # )
+        # print("\033[1;32m_" * 20, "_\033[0m" * 20)
 
         # DATOS DE LA COTIZACIÓN, CLIENTE Y SOLICITUD
         sheet_quote = archivo_excel.sheet_by_index(1)
@@ -270,11 +337,11 @@ class MyTestCase(unittest.TestCase):
             print(fila)
             try:
                 self.login(fila, fila_environment)
+                self.cotizador_datos_solicitante(fila)
                 self.cotizador_producto(fila, fila_environment)
                 self.cotizador_plan_financiero(fila)
                 self.cotizador_seguro_de_auto(fila)
                 self.cotizador_detalle_financiamiento(fila)
-                self.cotizador_datos_solicitante(fila)
                 self.cotizador_imprimir(fila)
                 self.cotizador_log(fila)
                 self.solicita_credito(fila)
@@ -290,7 +357,9 @@ class MyTestCase(unittest.TestCase):
             login = LoginPage(driver)
             search = SearchPage(driver)
             quote = QuotePage(driver)
-            driver.close()
+            quotepm = QuotePagePM(driver)
+            # driver.close()
+
             print("                                                                    ")
             print("\033[1;32m*" * 30 + " ESCENARIO # ", fila["var_escenario"], "*\033[0m" * 30)
             if fila_environment["var_environment"] == "BYD_QA":
@@ -308,6 +377,19 @@ class MyTestCase(unittest.TestCase):
                 login.enter_password("S1santan")
                 login.click_login()
                 print("\033[1;32m-" * 1 + " LOGIN EXITOSO " + "-\033[0m" * 1)
+
+                # time.sleep(4)
+                # quotepm.menu_pm()
+                # quotepm.menu_pm_2()
+                # time.sleep(3)
+                # quotepm.clic_nvaCot()
+                # time.sleep(5)
+                # quotepm.clic_product_n()
+                # time.sleep(2)
+                # quotepm.clic_marca()
+                # time.sleep(3)
+                # quotepm.enter_marca("ACURA")
+                # time.sleep(10)
 
                 # Búsqueda de Cotizaciones
                 search.click_nvaCot()

@@ -170,6 +170,13 @@ def cotizador_detalle_financiamiento(self, driver, fila):
                 self.TblamortizationTCM = 'Tabla de Amortización C2: No contiene información'
         else:
             pass
+        # try:
+        #     self.assertEqual(quote_cat, self.cat)
+        #     print("Assert correcto")
+        #     print(quote_cat, self.cat)
+        # except AssertionError:
+        #     print("Entró al AssertionError")
+        #     print(quote_cat, self.cat)
     except TimeoutException as e:
         error_message = f"Error en el escenario {fila['var_escenario']}: {str(e)}"
         logging.error(error_message)
