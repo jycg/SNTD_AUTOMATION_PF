@@ -24,10 +24,10 @@ class Locators:
     producto_uso_p_BYD = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[3]/div[1]/div[1]/input[1]"
     producto_uso_cp = "opUsePrivate"  # ID
     producto_uso_c = "opUseComercial"  # ID
-    producto_p_f = "//body/div[1]/div[2]/div[1]/div[1]/div[3]/div[4]/div[1]/div[1]/input[1]"  # XPATH
+    producto_p_f = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[4]/div[4]/div[1]/div[1]/input[1]"  # XPATH
     producto_p_f_BYD = "//body/div[1]/div[2]/div[1]/div[1]/div[2]/div[4]/div[1]/div[1]/input[1]"
     producto_p_f_OM = "/html[1]/body[1]/div[2]/div[2]/div[1]/div[1]/div[2]/div[4]/div[1]/div[1]/input[1]"
-    producto_p_fae = "//body/div[1]/div[2]/div[1]/div[1]/div[3]/div[4]/div[1]/div[2]/input[1]"  # XPATH
+    producto_p_fae = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[4]/div[4]/div[1]/div[2]/input[1]"  # XPATH
     producto_p_fae_BYD = "//body/div[1]/div[2]/div[1]/div[1]/div[2]/div[4]/div[1]/div[2]/input[1]"
     producto_p_fae_OM = "/html[1]/body[1]/div[2]/div[2]/div[1]/div[1]/div[2]/div[4]/div[1]/div[2]/input[1]"
     producto_marca_click = "select2-cboBrandID-container"  # ID
@@ -53,9 +53,11 @@ class Locators:
     plan_type_accesories = "//select[@id='cboPaymentTypeAccessories']"
     plan_cuotas_show = "btnCalcCuotas"  # ID
     plan_cuotas_select = "divTermContent_24"  # ID
-    plan_garantia_extendida = "chkExtendedWarranty"
-    plan_seguro_robo = "chkAutoPartsTheftInsurance"
-    plan_seguro_gap = "chkInsuranceGap"
+    plan_garantia_extendida = "extendedWarrantyChecks"  # NAME
+    plan_seguro_robo_advanced = "/html[1]/body[1]/div[10]/div[1]/div[1]/div[2]/div[1]/div[1]/table[1]/tbody[1]/tr[3]/td[1]/input[1]"  # XPATH
+    plan_seguro_robo_signature = "/html[1]/body[1]/div[10]/div[1]/div[1]/div[2]/div[1]/div[1]/table[1]/tbody[1]/tr[4]/td[1]/input[1]"  # XPATH
+    plan_seguro_gap = "chkInsuranceGap"  # ID
+    plan_seguro_gap_forma_pago = "cmbGAPPayForm"  # ID
     plan_coberturas = "divMessageBody"
     alert_label = "//h3[contains(text(),'Atención')]"
     plan_aceptar_click = "//button[@id='btnAccept']"
@@ -71,8 +73,8 @@ class Locators:
     insurance_cp = "txtZipCode"  # ID
     insurance_cobertura = "cboCoberture"  # ID
     insurance_birthdate = "txdBirthDate"  # ID
-    insurance_male = "//body/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/div[5]/div[1]/div[6]/div[2]/div[1]/label[1]/span[1]"  # XPATH
-    insurance_female = "//body/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/div[5]/div[1]/div[6]/div[2]/div[1]/label[2]/span[1]"  # XPATH
+    insurance_male = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[7]/div[1]/div[4]/div[1]/div[6]/div[2]/div[1]/label[1]/span[1]"  # XPATH
+    insurance_female = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[7]/div[1]/div[4]/div[1]/div[6]/div[2]/div[1]/label[2]/span[1]"  # XPATH
     insurance_recibo1 = "txtManualFirstReceipt"  # ID
     insurance_recibo2 = "txtManualConsequentReceipt"  # ID
     insurance_subsecuente = "txtManualSecondConsequentReceipt"  # ID
@@ -86,23 +88,30 @@ class Locators:
     insurance_UDI = "cboUDI"
 
     # Sección "DETALLE DEL FINANCIAMIENTO"
-    txtPay12 = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/div[2]/div[1]/div[1]/span[1]"
-    txtPay24 = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/div[2]/div[2]/div[1]/span[1]"
-    txtPay36 = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/div[2]/div[3]/div[1]/span[1]"
-    txtPay48 = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/div[2]/div[4]/div[1]/span[1]"
-    txtPay60 = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/div[2]/div[5]/div[1]/span[1]"
-    txtPay72 = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/div[2]/div[6]/div[1]/span[1]"
-    cat = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/div[8]/div[2]/div[2]/div[1]/label[1]/b[2]"
+    txtPay12 = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[7]/div[1]/div[1]/div[2]/div[1]/div[1]/span[1]"
+    txtPay24 = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[7]/div[1]/div[1]/div[2]/div[2]/div[1]/span[1]"
+    txtPay36 = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[7]/div[1]/div[1]/div[2]/div[3]/div[1]/span[1]"
+    txtPay48 = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[7]/div[1]/div[1]/div[2]/div[4]/div[1]/span[1]"
+    txtPay60 = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[7]/div[1]/div[1]/div[2]/div[5]/div[1]/span[1]"
+    txtPay72 = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[7]/div[1]/div[1]/div[2]/div[6]/div[1]/span[1]"
+    cat = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[7]/div[1]/div[7]/div[2]/div[2]/div[1]/label[1]/b[2]"
     amortizationdetail_lblCar = "lblCar"  # ID
-    amortizationdetail_lblPriceList = "lblPriceList"
-    amortizationdetail_tdaccessories = "tdaccessories"
-    amortizationdetail_tdaccessoriesamount = "tdaccessoriesamount"
-    amortizationdetail_VFG = "VFG"
-    amortizationdetail_balloonTCMInfo = "balloonTCMInfo"
-    amortizationdetail_tdInterestRateTCM = "tdInterestRateTCM"
-    amortizationdetail_tdTermTCM = "tdTermTCM"
-    tblAmortization_information = "tblAmortization"
-    tblAmortizationCycle2_TCM = "tblAmortizationCycle2"
+    amortizationdetail_lblPriceList = "lblPriceList"  # ID
+    amortizationdetail_tdaccessories = "tdaccessories"  # ID
+    amortizationdetail_tdaccessoriesamount = "tdaccessoriesamount"  # ID
+    amortizationdetail_tdAdditionalCoverageAmount = "tdAdditionalCoverageAmount"  # ID
+    amortizationdetail_tdExtendedWarrantyAmount = "tdExtendedWarrantyAmount"  # ID
+    amortizationdetail_tdAutoPartsTheftInsuranceAmount = "tdAutoPartsTheftInsuranceAmount"  # ID
+    amortizationdetail_tdInsuranceGAPAmount = "tdInsuranceGAPAmount"  # ID
+    amortizationdetail_tdTasa = "tdTasa"  # ID
+    amortizationdetail_tdPLazo = "tdPLazo"  # ID
+    amortizationdetail_lblSeguroVd = "lblSeguroVd"  # ID
+    amortizationdetail_VFG = "VFG"  # ID
+    amortizationdetail_balloonTCMInfo = "balloonTCMInfo"  # ID
+    amortizationdetail_tdInterestRateTCM = "tdInterestRateTCM"  # ID
+    amortizationdetail_tdTermTCM = "tdTermTCM"  # ID
+    tblAmortization_information = "tblAmortization"  # ID
+    tblAmortizationCycle2_TCM = "tblAmortizationCycle2"  # ID
 
     # Sección "DATOS DEL SOLICITANTE"
     information_fname = "txtfName"  # ID
@@ -114,7 +123,7 @@ class Locators:
     information_cellphone = "txtCelphone"  # ID
     information_cellcompany_click = "cboPhoneCompany"  # ID
     information_email = "txtMail"  # ID
-    quote_check_aviso_click_1 = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/div[10]/label[2]/span[1]/span[1]"  # XPATH
+    quote_check_aviso_click_1 = "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[7]/div[1]/div[9]/div[1]/label[2]/span[1]/span[1]"  # XPATH
     quote_check_aviso_click_2 = "/html[1]/body[1]/div[8]/div[1]/div[1]/div[2]/div[1]/div[1]/label[1]/span[1]/span[1]"
     quote_check_aviso_msj_click = "//button[@id='btnNoticeOfPrivacyOk']"  # XPAT
     quote_imprimir_click = "btnImpCot"  # ID

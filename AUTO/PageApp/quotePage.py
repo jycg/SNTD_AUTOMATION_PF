@@ -31,13 +31,14 @@ class QuotePage:
             print(f"Error al ingresar agencia: {e}")
 
     def click_arrendamiento(self):
-        try:
-            arrendamiento_element = WebDriverWait(self.driver, 10).until(
-                EC.element_to_be_clickable((By.ID, Locators.producto_arrendamiento))
-            )
-            arrendamiento_element.click()
-        except Exception as e:
-            print(f"Error al hacer clic en arrendamiento: {e}")
+        self.driver.find_element(By.ID, Locators.producto_arrendamiento).click()
+        # try:
+        #     arrendamiento_element = WebDriverWait(self.driver, 10).until(
+        #         EC.element_to_be_clickable((By.ID, Locators.producto_arrendamiento))
+        #     )
+        #     arrendamiento_element.click()
+        # except Exception as e:
+        #     print(f"Error al hacer clic en arrendamiento: {e}")
 
     def click_tipon(self):
         self.driver.find_element(By.XPATH, Locators.producto_tipo_n).click()
@@ -173,13 +174,19 @@ class QuotePage:
         self.driver.find_element(By.ID, Locators.plan_cuotas_select).click()
 
     def click_GE(self):
-        self.driver.find_element(By.ID, Locators.plan_garantia_extendida).click()
+        self.driver.find_element(By.NAME, Locators.plan_garantia_extendida).click()
 
-    def click_SRA(self):
-        self.driver.find_element(By.ID, Locators.plan_seguro_robo).click()
+    def click_SRA_Advanced(self):
+        self.driver.find_element(By.XPATH, Locators.plan_seguro_robo_advanced).click()
+
+    def click_SRA_Signature(self):
+        self.driver.find_element(By.XPATH, Locators.plan_seguro_robo_signature).click()
 
     def click_GaP(self):
         self.driver.find_element(By.ID, Locators.plan_seguro_gap).click()
+
+    def click_GaP_type(self, typegapformapago):
+        self.driver.find_element(By.ID, Locators.plan_seguro_gap_forma_pago).send_keys(typegapformapago)
 
     def click_label(self):
         self.driver.find_element(By.XPATH, Locators.alert_label).click()

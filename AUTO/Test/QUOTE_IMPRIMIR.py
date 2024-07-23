@@ -24,11 +24,21 @@ logging.basicConfig(filename=log_filename, level=logging.INFO, format='%(asctime
 def cotizador_imprimir(driver, fila):
     quote = QuotePage(driver)
     try:
+        quote.click_aviso_1()
+        time.sleep(1)
+        quote.click_aviso_2()
+        time.sleep(1)
+        quote.click_aviso_msj()
+        time.sleep(1)
         quote.click_imprimir()
         time.sleep(1)
         element_msj = driver.find_element(By.XPATH, Locators.alert_label)
         if element_msj.is_displayed():
             quote.click_aceptar_msj_gap()
+        else:
+            pass
+        if fila["var_producto_finan"] == "ARRENDAMIENTO":
+            time.sleep(20)
         else:
             pass
     except TimeoutException as e:

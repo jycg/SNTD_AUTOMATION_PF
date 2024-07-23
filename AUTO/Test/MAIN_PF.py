@@ -1,6 +1,5 @@
 import time
 import unittest
-import sys
 import os
 import xlrd
 import logging
@@ -8,12 +7,16 @@ import traceback
 from datetime import datetime
 from selenium import webdriver
 from selenium.common import TimeoutException
+from selenium.webdriver.edge.service import Service as EdgeService
+from selenium.webdriver.edge.options import Options
+from faker import Faker
+from openpyxl import load_workbook
+import locale
+import warnings
+
 from AUTO.PageApp.loginPage import LoginPage
 from AUTO.PageApp.searchPage import SearchPage
 from AUTO.PageApp.quotePage import QuotePage
-from selenium.webdriver.edge.service import Service as EdgeService
-from faker import Faker
-from selenium.webdriver.edge.options import Options
 from DATAENTRY_DATOS_PERSONALES import solicita_credito, solicitud_datos_personales
 from QUOTE_PRODUCTO import cotizador_producto
 from QUOTE_PLAN import cotizador_plan_financiero
@@ -21,19 +24,26 @@ from QUOTE_SEGURO import cotizador_seguro_de_auto
 from QUOTE_DETALLE_FINANCIAMIENTO import cotizador_detalle_financiamiento
 from QUOTE_DATOS_SOLICITANTE import cotizador_datos_solicitante
 from QUOTE_IMPRIMIR import cotizador_imprimir
-from openpyxl import load_workbook
-import locale
-from AUTO.PageApp.quotePagePM import QuotePagePM
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "...", "..."))
-fake = Faker()
-log_dir = 'C:/Automation_Performance_Sast/app_log'
-os.makedirs(log_dir, exist_ok=True)
+# Suppress UserWarnings from openpyxl
+warnings.simplefilter(action='ignore', category=UserWarning)
+
+# Files
+BASE_DIR = 'C:/Automation_Performance_Sast'
+LOG_DIR_BASE = os.path.join(BASE_DIR, 'app_log')
+DRIVER_PATH = 'C:/Users/jgarcia/PycharmProjects/SNTDProject/drivers/Edge/126/msedgedriver.exe'
+EXCEL_FILE_QUOTE = os.path.join(BASE_DIR, 'SNTD_QUOTE_PF_TEST.xls')
+EXCEL_FILE_COT = os.path.join(BASE_DIR, 'Cotizador_CAT_2.xlsm')
+
+# Configuración de Log
 log_subdir = datetime.now().strftime('%Y-%m-%d')
-log_dir = os.path.join(log_dir, log_subdir)
+log_dir = os.path.join(LOG_DIR_BASE, log_subdir)
 os.makedirs(log_dir, exist_ok=True)
 log_filename = os.path.join(log_dir, 'log.txt')
 logging.basicConfig(filename=log_filename, level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+# Inicializa el método Faker
+fake = Faker()
 
 
 class MyTestCase(unittest.TestCase):
@@ -74,11 +84,11 @@ class MyTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        s = "C:/Users/jgarcia/PycharmProjects/SNTDProject/drivers/Edge/126/msedgedriver.exe"
-        edge_service = EdgeService(s)
+        edge_service = EdgeService(DRIVER_PATH)
         edge_options = Options()
         edge_options.add_argument('--ignore-certificate-errors')
         edge_options.add_argument('--ignore-ssl-errors')
+        # edge_options.headless = True
         cls.driver = webdriver.Edge(service=edge_service, options=edge_options)
         cls.driver.delete_all_cookies()
         if "data:" not in cls.driver.current_url:
@@ -88,24 +98,15 @@ class MyTestCase(unittest.TestCase):
         cls.driver.maximize_window()
 
     def test_cotizador_valid(self):
-        # SECCIÓN PARA OBTENER DATOS DE EXCEL
-
-        # DATOS DEL AMBIENTE
-        archivo_excel = xlrd.open_workbook('C:/Automation_Performance_Sast/SNTD_QUOTE_PF_TEST.xls')
+        archivo_excel = xlrd.open_workbook(EXCEL_FILE_QUOTE)
         sheet_environment = archivo_excel.sheet_by_index(0)
         fila_environment = {
             "var_environment": sheet_environment.cell_value(1, 0),
             "var_url": sheet_environment.cell_value(1, 1),
-            "var_canal": sheet_environment.cell_value(1, 2),
-            "var_user": sheet_environment.cell_value(1, 3)
+            "var_canal": sheet_environment.cell_value(1, 2)
         }
-        print(fila_environment)
-
-        # DATOS DE LA COTIZACIÓN PARA VALIDAR LOS ASSERT
-        name_tab = 'Cotizador'
-        cot_excel = load_workbook(filename='C:/Automation_Performance_Sast/Cotizador_CAT_2.xlsm', data_only=True)
-        # sheet_cot = cot_excel[name_tab]
-        sheet_cot = cot_excel[name_tab]
+        cot_excel = load_workbook(filename=EXCEL_FILE_COT, data_only=True)
+        sheet_cot = cot_excel['Cotizador']
         fila_cot = {
             "precio_vehiculo": sheet_cot.cell(row=5, column=3).value,
             "enganche": sheet_cot.cell(row=6, column=3).value,
@@ -156,7 +157,6 @@ class MyTestCase(unittest.TestCase):
             "iva_interes_37": sheet_cot.cell(row=72, column=8).value,
             "mensualidad_37": sheet_cot.cell(row=72, column=9).value,
         }
-        print(fila_cot)
         locale.setlocale(locale.LC_ALL, '')
         quote_precio_vehiculo = locale.currency(fila_cot["precio_vehiculo"], grouping=True)
         quote_enganche = locale.currency(fila_cot["enganche"], grouping=True)
@@ -278,73 +278,50 @@ class MyTestCase(unittest.TestCase):
 
         # DATOS DE LA COTIZACIÓN, CLIENTE Y SOLICITUD
         sheet_quote = archivo_excel.sheet_by_index(1)
+        fields = [
+            "var_estatus", "var_usuario", "var_escenario", "var_agencia", "var_tipo_credito", "var_producto_finan",
+            "var_tipo_producto", "var_tipo_uso", "var_tipo_persona", "var_marca",
+            "var_modelo", "var_version", "var_ano", "var_plan",
+            "var_accesorios", "var_monto_accesorios", "var_forma_pago_acce",
+            "var_g_ext", "var_monto_g_ext", "var_forma_pago_g_ext",
+            "var_plazo", "var_seguro_robo_aut", "var_seguro_robo_aut_cobertura",
+            "var_gap", "var_gap_forma_pago", "var_seguro_danos", "var_forma_pago", "var_tipo",
+            "var_cp", "var_cobertura", "var_fecha", "var_sexo", "var_UDI",
+            "var_recibo1", "var_recibo2", "var_subsecuente", "var_autocompara",
+            "var_aseguradora", "var_faker", "lada", "telefono", "celular",
+            "compania", "email", "var_tbl_amortiza", "var_crearsolicitud",
+            "var_clienteSNTD", "var_sexo_solicitud", "var_fechanac", "var_entidad",
+            "var_homoclave", "var_curp", "var_edocivil", "var_r_matrimonial",
+            "var_dependientes", "var_nivelestudio", "var_ocupacion"
+        ]
+
+        # Iterar sobre las filas del Excel
         for numero_fila in range(1, sheet_quote.nrows):
-            fila = {
-                "var_escenario": int(sheet_quote.cell_value(numero_fila, 0)),
-                "var_agencia": sheet_quote.cell_value(numero_fila, 1),
-                "var_tipo_credito": sheet_quote.cell_value(numero_fila, 2),
-                "var_producto_finan": sheet_quote.cell_value(numero_fila, 3),
-                "var_tipo_producto": sheet_quote.cell_value(numero_fila, 4),
-                "var_tipo_uso": sheet_quote.cell_value(numero_fila, 5),
-                "var_tipo_persona": sheet_quote.cell_value(numero_fila, 6),
-                "var_marca": sheet_quote.cell_value(numero_fila, 7),
-                "var_modelo": sheet_quote.cell_value(numero_fila, 8),
-                "var_version": sheet_quote.cell_value(numero_fila, 9),
-                "var_ano": int(sheet_quote.cell_value(numero_fila, 10)),
-                "var_plan": sheet_quote.cell_value(numero_fila, 11),
-                "var_accesorios": sheet_quote.cell_value(numero_fila, 12),
-                "var_monto_accesorios": sheet_quote.cell_value(numero_fila, 13),
-                "var_forma_pago_acce": sheet_quote.cell_value(numero_fila, 14),
-                "var_g_ext": sheet_quote.cell_value(numero_fila, 15),
-                "var_monto_g_ext": sheet_quote.cell_value(numero_fila, 16),
-                "var_forma_pago_g_ext": sheet_quote.cell_value(numero_fila, 17),
-                "var_plazo": int(sheet_quote.cell_value(numero_fila, 18)),
-                "var_seguro_robo_aut": sheet_quote.cell_value(numero_fila, 19),
-                "var_gap": sheet_quote.cell_value(numero_fila, 20),
-                "var_seguro_danos": sheet_quote.cell_value(numero_fila, 21),
-                "var_forma_pago": sheet_quote.cell_value(numero_fila, 22),
-                "var_tipo": sheet_quote.cell_value(numero_fila, 23),
-                "var_cp": sheet_quote.cell_value(numero_fila, 24),
-                "var_cobertura": sheet_quote.cell_value(numero_fila, 25),
-                "var_fecha": sheet_quote.cell_value(numero_fila, 26),
-                "var_sexo": sheet_quote.cell_value(numero_fila, 27),
-                "var_UDI": sheet_quote.cell_value(numero_fila, 28),
-                "var_recibo1": sheet_quote.cell_value(numero_fila, 29),
-                "var_recibo2": sheet_quote.cell_value(numero_fila, 30),
-                "var_subsecuente": sheet_quote.cell_value(numero_fila, 31),
-                "var_autocompara": sheet_quote.cell_value(numero_fila, 32),
-                "var_aseguradora": sheet_quote.cell_value(numero_fila, 33),
-                "var_faker": sheet_quote.cell_value(numero_fila, 34),
-                "lada": sheet_quote.cell_value(numero_fila, 35),
-                "telefono": sheet_quote.cell_value(numero_fila, 36),
-                "celular": sheet_quote.cell_value(numero_fila, 37),
-                "compania": sheet_quote.cell_value(numero_fila, 38),
-                "email": sheet_quote.cell_value(numero_fila, 39),
-                "var_tbl_amortiza": sheet_quote.cell_value(numero_fila, 40),
-                "var_crearsolicitud": sheet_quote.cell_value(numero_fila, 41),
-                "var_clienteSNTD": sheet_quote.cell_value(numero_fila, 42),
-                "var_sexo_solicitud": sheet_quote.cell_value(numero_fila, 43),
-                "var_fechanac": sheet_quote.cell_value(numero_fila, 44),
-                "var_entidad": sheet_quote.cell_value(numero_fila, 45),
-                "var_homoclave": sheet_quote.cell_value(numero_fila, 46),
-                "var_curp": sheet_quote.cell_value(numero_fila, 47),
-                "var_edocivil": sheet_quote.cell_value(numero_fila, 48),
-                "var_r_matrimonial": sheet_quote.cell_value(numero_fila, 49),
-                "var_dependientes": sheet_quote.cell_value(numero_fila, 50),
-                "var_nivelestudio": sheet_quote.cell_value(numero_fila, 51),
-                "var_ocupacion": sheet_quote.cell_value(numero_fila, 52),
-            }
-            print(fila)
+            fila = {}
+            for i, field in enumerate(fields):
+                value = sheet_quote.cell_value(numero_fila, i)
+                if field in ["var_escenario", "var_ano", "var_plazo"]:
+                    try:
+                        value = int(value)  # Asegúrate de convertir a entero los campos que lo necesiten
+                    except ValueError:
+                        pass  # Si no se puede convertir, deja el valor tal como está
+                fila[field] = value
+            # print(fila)
             try:
-                self.login(fila, fila_environment)
-                self.cotizador_datos_solicitante(fila)
-                self.cotizador_producto(fila, fila_environment)
-                self.cotizador_plan_financiero(fila)
-                self.cotizador_seguro_de_auto(fila)
-                self.cotizador_detalle_financiamiento(fila)
-                self.cotizador_imprimir(fila)
-                self.cotizador_log(fila)
-                self.solicita_credito(fila)
+                if fila['var_estatus'] != 'EJECUTAR':
+                    msj = f"El escenario '{fila['var_escenario']}' no se ejecutó porque está marcado como 'PASAR' o no tiene un estatus asignado."
+                    logging.info(msj)
+                    pass
+                else:
+                    self.login(fila, fila_environment)
+                    self.cotizador_datos_solicitante(fila)
+                    self.cotizador_producto(fila, fila_environment)
+                    self.cotizador_plan_financiero(fila)
+                    self.cotizador_seguro_de_auto(fila)
+                    self.cotizador_detalle_financiamiento(fila)
+                    self.cotizador_imprimir(fila)
+                    self.cotizador_log(fila)
+                    self.solicita_credito(fila)
             except Exception as e:
                 error_message = f"Error en el escenario {fila['var_escenario']}: {str(e)}"
                 logging.error(error_message)
@@ -357,8 +334,6 @@ class MyTestCase(unittest.TestCase):
             login = LoginPage(driver)
             search = SearchPage(driver)
             quote = QuotePage(driver)
-            quotepm = QuotePagePM(driver)
-            # driver.close()
 
             print("                                                                    ")
             print("\033[1;32m*" * 30 + " ESCENARIO # ", fila["var_escenario"], "*\033[0m" * 30)
@@ -373,23 +348,10 @@ class MyTestCase(unittest.TestCase):
 
             # LOGIN
             if fila_environment["var_environment"] != "BYD_QA" and fila_environment["var_environment"] != "OM2":
-                login.enter_username(fila_environment["var_user"])
+                login.enter_username(fila["var_usuario"])
                 login.enter_password("S1santan")
                 login.click_login()
                 print("\033[1;32m-" * 1 + " LOGIN EXITOSO " + "-\033[0m" * 1)
-
-                # time.sleep(4)
-                # quotepm.menu_pm()
-                # quotepm.menu_pm_2()
-                # time.sleep(3)
-                # quotepm.clic_nvaCot()
-                # time.sleep(5)
-                # quotepm.clic_product_n()
-                # time.sleep(2)
-                # quotepm.clic_marca()
-                # time.sleep(3)
-                # quotepm.enter_marca("ACURA")
-                # time.sleep(10)
 
                 # Búsqueda de Cotizaciones
                 search.click_nvaCot()
@@ -399,6 +361,7 @@ class MyTestCase(unittest.TestCase):
                 time.sleep(2)
                 quote.click_agencia()
                 quote.enter_agencia(fila["var_agencia"])
+
             else:
                 pass
         except TimeoutException as e:

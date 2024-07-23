@@ -49,9 +49,9 @@ def cotizador_datos_solicitante(self, driver, fila):
             slastname = fake.last_name()
         else:
             fname = "JULIO"
-            sname = "DE JESUS"
-            flastname = "GARCIA"
-            slastname = "HERNANDEZ"
+            sname = "DE JESÚS"
+            flastname = "GARCÍA"
+            slastname = "HERNÁNDEZ"
 
         quote.enter_fname(fname)
         quote.enter_sname(sname)
@@ -63,12 +63,6 @@ def cotizador_datos_solicitante(self, driver, fila):
         quote.enter_cellphone(fila["celular"])
         quote.click_cellcompany(fila["compania"])
         quote.enter_email(fila["email"])
-        time.sleep(1)
-        quote.click_aviso_1()
-        time.sleep(1)
-        quote.click_aviso_2()
-        time.sleep(1)
-        quote.click_aviso_msj()
         time.sleep(1)
     except TimeoutException as e:
         error_message = f"Error en el escenario {fila['var_escenario']}: {str(e)}"

@@ -75,22 +75,38 @@ def cotizador_detalle_financiamiento(self, driver, fila):
         self.lblcar = wait_and_get_text(self.driver, Locators.amortizationdetail_lblCar)
         # Valor del Vehículo
         self.lblpricelist = wait_and_get_text(self.driver, Locators.amortizationdetail_lblPriceList)
-        # Accesorios Vehículo
-        self.tdaccessoriesamount = wait_and_get_text(self.driver, 'tdAccessoriesAmount')
+        if fila["var_accesorios"] == "SI":
+            # Accesorios Vehículo
+            self.tdaccessoriesamount = wait_and_get_text(self.driver, Locators.amortizationdetail_tdaccessoriesamount)
+        else:
+            pass
         # Coberturas Adicionales
-        self.tdadditionalcoverageamount = wait_and_get_text(self.driver, 'tdAdditionalCoverageAmount')
-        # Garantía Extendida
-        self.tdextendedwarrantyamount = wait_and_get_text(self.driver, 'tdExtendedWarrantyAmount')
-        # Seguro de Robo de Autopartes
-        self.tdautopartstheftinsuranceamount = wait_and_get_text(self.driver, 'tdAutoPartsTheftInsuranceAmount')
-        # Seguro GAP
-        self.tdInsuranceGAPAmount = wait_and_get_text(self.driver, 'tdInsuranceGAPAmount')
-        # Tasa Fija
-        self.tdTasa = wait_and_get_text(self.driver, 'tdTasa')
-        # Plazo
-        self.tdPLazo = wait_and_get_text(self.driver, 'tdPLazo')
-        # Seguro de Vida y Desempleo
-        self.lblSeguroVd = wait_and_get_text(self.driver, 'lblSeguroVd')
+        self.tdadditionalcoverageamount = wait_and_get_text(self.driver, Locators.amortizationdetail_tdAdditionalCoverageAmount)
+        if fila["var_g_ext"] == "SI":
+            # Garantía Extendida
+            self.tdextendedwarrantyamount = wait_and_get_text(self.driver, Locators.amortizationdetail_tdExtendedWarrantyAmount)
+        else:
+            pass
+        if fila["var_seguro_robo_aut"] == "SI":
+            # Seguro de Robo de Autopartes
+            self.tdautopartstheftinsuranceamount = wait_and_get_text(self.driver, Locators.amortizationdetail_tdAutoPartsTheftInsuranceAmount)
+        else:
+            pass
+        if fila["var_gap"] == "SI":
+            # Seguro GAP
+            self.tdInsuranceGAPAmount = wait_and_get_text(self.driver, Locators.amortizationdetail_tdInsuranceGAPAmount)
+        else:
+            pass
+        if fila["var_producto_finan"] == "CREDITO":
+            # Tasa Fija
+            self.tdTasa = wait_and_get_text(self.driver, Locators.amortizationdetail_tdTasa)
+            # Plazo
+            self.tdPLazo = wait_and_get_text(self.driver, Locators.amortizationdetail_tdPLazo)
+            # Seguro de Vida y Desempleo
+            self.lblSeguroVd = wait_and_get_text(self.driver, Locators.amortizationdetail_lblSeguroVd)
+        else:
+            pass
+
         # Seguro del vehículo Año 1
         self.tdSeguro = wait_and_get_text(self.driver, 'tdSeguro')
 
@@ -157,7 +173,10 @@ def cotizador_detalle_financiamiento(self, driver, fila):
         # Primer Pago
         self.tdMensualidad = self.driver.find_element(By.ID, 'tdMensualidad').text
         # CAT
-        self.cat = self.driver.find_element(By.XPATH, Locators.cat).text
+        if fila["var_producto_finan"] == "CREDITO":
+            self.cat = self.driver.find_element(By.XPATH, Locators.cat).text
+        else:
+            pass
         print("\033[1;32m-" * 1 + " DETALLE DE FINANCIAMIENTO Y TABLA DE AMORTIZACIÓN EXITOSO " + "-\033[0m" * 1)
 
         self.TblamortizationTCM = "No es visible"

@@ -6,6 +6,8 @@ import traceback
 from datetime import datetime
 from selenium.common import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.select import Select
+
 from AUTO.PageApp.quotePage import QuotePage
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -93,23 +95,43 @@ def cotizador_plan_financiero(self, driver, fila):
                     quote.click_GE()
                 except NoSuchElementException:
                     self.commentge = "Estás tratando de seleccionar garantía extendida pero no está configurado en el plan financiero"
+                    print(f"Estás tratando de seleccionar garantía extendida pero no está configurado en el plan financiero. O bien, se tuvo un problema")
             else:
                 pass
 
             if fila["var_seguro_robo_aut"] == "SI":
                 try:
-                    quote.click_SRA()
+                    if fila["var_seguro_robo_aut_cobertura"] == "Advanced":
+                        quote.click_SRA_Advanced()
+                    elif fila["var_seguro_robo_aut_cobertura"] == "Signature":
+                        quote.click_SRA_Signature()
+                    else:
+                        pass
                 except NoSuchElementException:
                     self.commentrsa = "Estás tratando de seleccionar seguro de robo autopartes pero no está configurado en el plan financiero"
+                    print(f"Estás tratando de seleccionar seguro de robo autopartes pero no está configurado en el plan financiero. O bien, se tuvo un problema")
             else:
                 quote.click_label()
 
             if fila["var_gap"] == "SI":
-
                 try:
-                    quote.click_GaP()
+                    element_gap_formapago = driver.find_element(By.ID, Locators.plan_seguro_gap_forma_pago)
+                    if element_gap_formapago.is_enabled():
+                        select_gap_formapago = Select(element_gap_formapago)
+
+                        options = [option.text for option in select_gap_formapago.options]
+
+                        if fila["var_gap_forma_pago"] in options:
+                            quote.click_GaP_type(fila["var_gap_forma_pago"])
+                            quote.click_GaP()
+                        else:
+                            print(f"La opción {fila['var_gap_forma_pago']} no está disponible en las opciones del select.")
+                            pass
+                    else:
+                        print("El elemento plan_seguro_gap_forma_pago está deshabilitado.")
+                        pass
                 except NoSuchElementException:
-                    self.commentgap = "Estás tratando de seleccionar seguro GaP pero no está configurado en el plan financiero"
+                    print(f"Estás tratando de seleccionar seguro GaP pero no está configurado en el plan financiero. O bien, se tuvo un problema")
 
             else:
                 quote.click_label()
